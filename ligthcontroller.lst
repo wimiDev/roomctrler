@@ -1,0 +1,63 @@
+C51 COMPILER V9.00   LIGTHCONTROLLER                                                       04/01/2017 16:31:15 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE LIGTHCONTROLLER
+OBJECT MODULE PLACED IN ligthcontroller.obj
+COMPILER INVOKED BY: I:\program\keil\C51\BIN\C51.EXE class\ligthcontroller.c LARGE BROWSE DEBUG OBJECTEXTEND PRINT(.\lig
+                    -thcontroller.lst) OBJECT(ligthcontroller.obj)
+
+line level    source
+
+   1          #include"ligthcontroller.h"
+   2          
+   3          void setlight(char para)
+   4          {       
+   5   1               _LIGHT_1 = 0;
+   6   1               _LIGHT_2 =     0;
+   7   1               _LIGHT_3 =     0;
+   8   1              if(para>=1) _LIGHT_1 = 1;
+   9   1              if(para>=2) _LIGHT_2 = 1;
+  10   1              if(para>=3) _LIGHT_3 = 1;
+  11   1      }
+  12          void timectrl(DATE*curr,DATE*closetime)
+  13          {       
+*** WARNING C235 IN LINE 13 OF CLASS\LIGTHCONTROLLER.C: parameter 1: different types
+*** WARNING C235 IN LINE 13 OF CLASS\LIGTHCONTROLLER.C: parameter 2: different types
+  14   1              setlight(3);
+  15   1              if(curr->hour>closetime->hour) 
+  16   1              {
+  17   2                      setlight(0);
+  18   2                      return;
+  19   2              }
+  20   1      
+  21   1              if(curr->hour==closetime->hour&&
+  22   1              curr->min>closetime->min)
+  23   1              {
+  24   2                      setlight(0);
+  25   2                      return;
+  26   2              }
+  27   1      
+  28   1              if(curr->hour==closetime->hour&&
+  29   1              curr->min==closetime->min&&
+  30   1              curr->sec>closetime->sec)setlight(0);                   
+  31   1      }
+  32          void numberctrl(unsigned char num)
+  33          {
+  34   1              
+  35   1      }
+*** WARNING C280 IN LINE 32 OF CLASS\LIGTHCONTROLLER.C: 'num': unreferenced local variable
+  36          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    266    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----       7
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  3 WARNING(S),  0 ERROR(S)

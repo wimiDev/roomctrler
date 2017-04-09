@@ -1,0 +1,85 @@
+C51 COMPILER V9.00   KEYHANDLER                                                            04/01/2017 16:31:15 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE KEYHANDLER
+OBJECT MODULE PLACED IN keyhandler.obj
+COMPILER INVOKED BY: I:\program\keil\C51\BIN\C51.EXE class\keyhandler.c LARGE BROWSE DEBUG OBJECTEXTEND PRINT(.\keyhandl
+                    -er.lst) OBJECT(keyhandler.obj)
+
+line level    source
+
+   1          #include"keyhandler.h"
+   2           char _keyval = -1;
+   3           char _keyvalbuf = -1;
+   4          void keyhandler()
+   5          {
+   6   1              char keyval = 0 ;
+   7   1              //char str[11];
+   8   1              keyval = getkeypree();
+   9   1              if(keyval != -1) 
+  10   1              {
+  11   2                      _keyval = keyval;
+  12   2                      return;
+  13   2              }       
+  14   1              if(_keyval!=-1) _keyvalbuf = _keyval;
+  15   1      //      switch(_keyval)
+  16   1      //      {
+  17   1      //              case 15:
+  18   1      //              {
+  19   1      //                      //上翻页
+  20   1      //                      _page++;
+  21   1      //                      if (_page > MAXPAGE) _page = 0;
+  22   1      //              }break;
+  23   1      //              case 11:
+  24   1      //              {
+  25   1      //                      //下翻页
+  26   1      //                      --_page;
+  27   1      //                      if (_page>MAXPAGE-1)    _page = MAXPAGE-1;
+  28   1      //              }break;
+  29   1      //              case 7:
+  30   1      //              {
+  31   1      //                      //取消
+  32   1      //              }break;
+  33   1      //              case 3:
+  34   1      //              {
+  35   1      //                //确定
+  36   1      //              }break;
+  37   1      //              default:{
+  38   1      //                 _page = _keyval >= 0?_keyval:_page;
+  39   1      //
+  40   1      //              }break;
+  41   1      //      }
+  42   1              _keyval=-1;
+  43   1      }
+  44          char getkey(bit _swallow)
+  45          {
+  46   1              char keyval = _keyvalbuf;
+  47   1              //吞噬按键值，后续的将获取不到按键值
+  48   1              if(_swallow) _keyvalbuf = -1;
+  49   1              return keyval;
+  50   1      }
+  51          char getnumber(char _code)
+  52          {
+  53   1              char code keycode[] = {0,1,2,-1,3,4,5,-1,6,7,8,-1,9,-1,-1,-1,-1};
+  54   1              return keycode[_code];
+C51 COMPILER V9.00   KEYHANDLER                                                            04/01/2017 16:31:15 PAGE 2   
+
+  55   1      }
+  56          void keynumberhandler()
+  57          {
+  58   1              
+  59   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     67    ----
+   CONSTANT SIZE    =     17    ----
+   XDATA SIZE       =      2    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       1
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

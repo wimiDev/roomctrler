@@ -1,0 +1,15 @@
+"DELAY.obj",
+"main.obj",
+"NRF24L01.obj",
+"uart.obj",
+"schduler.obj",
+"controller.obj",
+"ds1302.obj",
+"LCD5110.obj",
+"keyctrl.obj",
+"keyhandler.obj",
+"iddatabase.obj",
+"seting.obj",
+"ligthcontroller.obj" 
+TO "roomctrler" 
+RAMSIZE(256) 
