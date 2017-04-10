@@ -13,7 +13,7 @@ void sch1s()
 {
 	uiupdater();
 	getcutrrenttime();
-	timectrl(&currenttime,&closetime);//根据时间关灯
+	timectrl();//根据时间关灯
 } 
 void sch02s()
 {	

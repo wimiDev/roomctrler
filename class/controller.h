@@ -1,6 +1,6 @@
 #ifndef __CONTROLLER_H_
 #define __CONTROLLER_H_
-#define MAXPAGE 4
+#define MAXPAGE 5
 
 #include"global.h"
 
@@ -17,6 +17,7 @@ typedef struct _DATE
 
 extern DATE currenttime;//当前时间
 extern DATE closetime;//关灯时间
+extern DATE opentime;//关灯时间
 extern unsigned char _page;//显示的页,一级菜单
 extern unsigned char lvsecond;//二级菜单，0表示未在二级菜单
 extern unsigned char paralist[4]; 

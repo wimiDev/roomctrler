@@ -5,6 +5,7 @@ unsigned char lvsecond = 0;
  unsigned char number = 0;
 DATE currenttime;
 DATE closetime;//关灯时间
+DATE opentime;//开灯时间
 
 void controllerinit()
 {	 	
@@ -101,7 +102,7 @@ void trunpage()
 		{
 		//上翻页
 			_page++;
-			if (_page > MAXPAGE) _page = 0;
+			if (_page >= MAXPAGE) _page = 0;
 		}
 		if(getkey(0)==11)
 		{
@@ -134,17 +135,15 @@ void uiupdater()
 		if(lvsecond==0) showtimeval(&currenttime,"-TIME-NOW-");
 		setcurrenttime(&currenttime);
 	}
-	else if(_page==3)
+	else if(_page == 3)
 	{
 		setclosetime(&closetime);
 		if(lvsecond==0)	showtimeval(&closetime,"-OFF-TIME-");
-//		{
-//		//一级菜单
-//			LCDcls();
-//			LCDprintf("setofftime");
-//			sprintf(sendstr,"[%d-%d-%d]",(int)closetime.hour,(int)closetime.min,(int)closetime.sec);
-//			LCDprintf(sendstr);
-//		}
+	}
+	else if(_page == 4)
+	{
+		setclosetime(&opentime);
+		if(lvsecond==0)	showtimeval(&opentime,"OPEN-TIME-");
 	}	
 	getkey(1);
 }

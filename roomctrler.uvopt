@@ -216,8 +216,8 @@
       <Focus>0</Focus>
       <ColumnNumber>12</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>13</TopLine>
-      <CurrentLine>13</CurrentLine>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\class\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -298,7 +298,7 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>117</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
@@ -326,10 +326,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>29</ColumnNumber>
+      <ColumnNumber>8</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>124</TopLine>
-      <CurrentLine>140</CurrentLine>
+      <TopLine>166</TopLine>
+      <CurrentLine>173</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\class\controller.c</PathWithFileName>
       <FilenameWithoutPath>controller.c</FilenameWithoutPath>
@@ -340,10 +340,10 @@
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>36</ColumnNumber>
+      <ColumnNumber>25</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>15</TopLine>
-      <CurrentLine>30</CurrentLine>
+      <TopLine>13</TopLine>
+      <CurrentLine>24</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\class\controller.h</PathWithFileName>
       <FilenameWithoutPath>controller.h</FilenameWithoutPath>
@@ -438,7 +438,7 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>3</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
@@ -494,10 +494,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>61</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>55</TopLine>
-      <CurrentLine>69</CurrentLine>
+      <TopLine>1</TopLine>
+      <CurrentLine>4</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\class\seting.c</PathWithFileName>
       <FilenameWithoutPath>seting.c</FilenameWithoutPath>
@@ -522,10 +522,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>108</ColumnNumber>
+      <ColumnNumber>32</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>21</TopLine>
+      <CurrentLine>21</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\class\ligthcontroller.c</PathWithFileName>
       <FilenameWithoutPath>ligthcontroller.c</FilenameWithoutPath>
@@ -536,10 +536,10 @@
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>42</ColumnNumber>
+      <ColumnNumber>48</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>1</TopLine>
+      <CurrentLine>10</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\class\ligthcontroller.h</PathWithFileName>
       <FilenameWithoutPath>ligthcontroller.h</FilenameWithoutPath>
@@ -1887,7 +1887,7 @@
     <ActiveMDIGroup>0</ActiveMDIGroup>
     <MDIGroup>
       <Size>100</Size>
-      <ActiveTab>2</ActiveTab>
+      <ActiveTab>7</ActiveTab>
       <Documents>
         <Doc>
           <Name>CLASS\DS1302.H</Name>
@@ -1903,33 +1903,39 @@
         </Doc>
         <Doc>
           <Name>.\class\seting.c</Name>
-          <ColumnNumber>61</ColumnNumber>
-          <TopLine>55</TopLine>
-          <CurrentLine>69</CurrentLine>
-        </Doc>
-        <Doc>
-          <Name>.\class\main.c</Name>
-          <ColumnNumber>12</ColumnNumber>
-          <TopLine>13</TopLine>
-          <CurrentLine>13</CurrentLine>
+          <ColumnNumber>0</ColumnNumber>
+          <TopLine>1</TopLine>
+          <CurrentLine>4</CurrentLine>
         </Doc>
         <Doc>
           <Name>CLASS\CONTROLLER.H</Name>
-          <ColumnNumber>36</ColumnNumber>
-          <TopLine>15</TopLine>
-          <CurrentLine>30</CurrentLine>
+          <ColumnNumber>25</ColumnNumber>
+          <TopLine>13</TopLine>
+          <CurrentLine>24</CurrentLine>
         </Doc>
         <Doc>
           <Name>.\class\controller.c</Name>
-          <ColumnNumber>29</ColumnNumber>
-          <TopLine>124</TopLine>
-          <CurrentLine>140</CurrentLine>
+          <ColumnNumber>8</ColumnNumber>
+          <TopLine>166</TopLine>
+          <CurrentLine>173</CurrentLine>
         </Doc>
         <Doc>
           <Name>CLASS\GLOBAL.H</Name>
           <ColumnNumber>0</ColumnNumber>
           <TopLine>15</TopLine>
           <CurrentLine>24</CurrentLine>
+        </Doc>
+        <Doc>
+          <Name>CLASS\LIGTHCONTROLLER.H</Name>
+          <ColumnNumber>48</ColumnNumber>
+          <TopLine>1</TopLine>
+          <CurrentLine>10</CurrentLine>
+        </Doc>
+        <Doc>
+          <Name>.\class\ligthcontroller.c</Name>
+          <ColumnNumber>32</ColumnNumber>
+          <TopLine>21</TopLine>
+          <CurrentLine>21</CurrentLine>
         </Doc>
       </Documents>
     </MDIGroup>

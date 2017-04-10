@@ -1,4 +1,4 @@
-C51 COMPILER V9.00   LIGTHCONTROLLER                                                       04/01/2017 16:31:15 PAGE 1   
+C51 COMPILER V9.00   LIGTHCONTROLLER                                                       04/10/2017 20:02:32 PAGE 1   
 
 
 C51 COMPILER V9.00, COMPILATION OF MODULE LIGTHCONTROLLER
@@ -10,53 +10,83 @@ line level    source
 
    1          #include"ligthcontroller.h"
    2          
-   3          void setlight(char para)
-   4          {       
-   5   1               _LIGHT_1 = 0;
-   6   1               _LIGHT_2 =     0;
-   7   1               _LIGHT_3 =     0;
-   8   1              if(para>=1) _LIGHT_1 = 1;
-   9   1              if(para>=2) _LIGHT_2 = 1;
-  10   1              if(para>=3) _LIGHT_3 = 1;
-  11   1      }
-  12          void timectrl(DATE*curr,DATE*closetime)
-  13          {       
-*** WARNING C235 IN LINE 13 OF CLASS\LIGTHCONTROLLER.C: parameter 1: different types
-*** WARNING C235 IN LINE 13 OF CLASS\LIGTHCONTROLLER.C: parameter 2: different types
-  14   1              setlight(3);
-  15   1              if(curr->hour>closetime->hour) 
-  16   1              {
-  17   2                      setlight(0);
-  18   2                      return;
-  19   2              }
-  20   1      
-  21   1              if(curr->hour==closetime->hour&&
-  22   1              curr->min>closetime->min)
-  23   1              {
-  24   2                      setlight(0);
-  25   2                      return;
-  26   2              }
-  27   1      
-  28   1              if(curr->hour==closetime->hour&&
-  29   1              curr->min==closetime->min&&
-  30   1              curr->sec>closetime->sec)setlight(0);                   
-  31   1      }
-  32          void numberctrl(unsigned char num)
-  33          {
-  34   1              
-  35   1      }
-*** WARNING C280 IN LINE 32 OF CLASS\LIGTHCONTROLLER.C: 'num': unreferenced local variable
-  36          
+   3          char lightvalue = 0;
+   4          bit timeout = 1;
+   5          
+   6          void setlight(char para)
+   7          {       
+   8   1               _LIGHT_1 = 0;
+   9   1               _LIGHT_2 =     0;
+  10   1               _LIGHT_3 =     0;
+  11   1              if(para>=1) _LIGHT_1 = 1;
+  12   1              if(para>=2) _LIGHT_2 = 1;
+  13   1              if(para>=3) _LIGHT_3 = 1;
+  14   1      }
+  15          void timectrl()
+  16          {       
+  17   1              timetoclose(&currenttime,&closetime,&opentime);
+  18   1              numberctrl(number);
+  19   1              setlight(lightvalue);           
+  20   1      }
+  21          void timetoclose(DATE* curr,DATE* closetime,DATE* opentime)
+  22          {
+*** WARNING C235 IN LINE 22 OF CLASS\LIGTHCONTROLLER.C: parameter 1: different types
+*** WARNING C235 IN LINE 22 OF CLASS\LIGTHCONTROLLER.C: parameter 2: different types
+*** WARNING C235 IN LINE 22 OF CLASS\LIGTHCONTROLLER.C: parameter 3: different types
+  23   1              //setlight(3);
+  24   1              if(curr->hour > closetime->hour ||
+  25   1                 curr->hour < opentime->hour  ) 
+  26   1              {
+  27   2                      //setlight(0);
+  28   2                      lightvalue=0;
+  29   2                      timeout = 1;
+  30   2                      return;
+  31   2              }
+  32   1      
+  33   1              if(curr->hour==closetime->hour&&
+  34   1                 curr->hour == opentime->hour&&
+  35   1                 curr->min>closetime->min ||
+  36   1                 curr->min < opentime->min)
+  37   1              {
+  38   2                      //setlight(0);
+  39   2                      lightvalue=0;
+  40   2                      timeout = 1;
+  41   2                      return;
+  42   2              }
+  43   1      
+  44   1              if(curr->hour==closetime->hour&&
+  45   1                 curr->hour == opentime->hour&&
+  46   1                 curr->min==closetime->min&&
+  47   1                 curr->min == opentime->min&&
+  48   1                 curr->sec > closetime->sec||
+  49   1                 curr->sec < opentime->sec
+  50   1                      ) 
+  51   1              {
+C51 COMPILER V9.00   LIGTHCONTROLLER                                                       04/10/2017 20:02:32 PAGE 2   
+
+  52   2                      lightvalue=0;//setlight(0);
+  53   2                      timeout = 1;
+  54   2                      return;
+  55   2              }
+  56   1              timeout = 0;    
+  57   1      }
+  58          
+  59          void numberctrl(unsigned char num)
+  60          {
+  61   1               if(timeout)return;
+  62   1               lightvalue = num;
+  63   1      }
+  64          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    266    ----
+   CODE SIZE        =    449    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =   ----       7
+   XDATA SIZE       =      1       9
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
-   BIT SIZE         =   ----    ----
+   BIT SIZE         =      1    ----
 END OF MODULE INFORMATION.
 
 
