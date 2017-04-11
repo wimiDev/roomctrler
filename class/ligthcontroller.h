@@ -12,5 +12,7 @@ extern void timectrl();
 //根据时间关灯
 extern void timetoclose(void* curr,void* closetime,void* opentime);
 extern void numberctrl(unsigned char num);//根据人数开关灯
+extern char timecmp(void* time1,void* time2);
+extern void timeadd(void* sum,void* add1);
 
 #endif

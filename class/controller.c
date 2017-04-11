@@ -137,13 +137,14 @@ void uiupdater()
 	}
 	else if(_page == 3)
 	{
-		setclosetime(&closetime);
-		if(lvsecond==0)	showtimeval(&closetime,"-OFF-TIME-");
+		setclosetime(&opentime);
+		if(lvsecond==0)	showtimeval(&opentime,"OPEN-TIME-");
+		//if(timecmp(opentime,))	
 	}
 	else if(_page == 4)
 	{
-		setclosetime(&opentime);
-		if(lvsecond==0)	showtimeval(&opentime,"OPEN-TIME-");
+		setclosetime(&closetime);
+		if(lvsecond==0)	showtimeval(&closetime,"-OFF-TIME-");
 	}	
 	getkey(1);
 }

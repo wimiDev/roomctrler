@@ -18,42 +18,65 @@ void timectrl()
 	numberctrl(number);
 	setlight(lightvalue);		
 }
+char timecmp(DATE* time1,DATE* time2)
+{
+	if(time1->hour > time2->hour) 
+	{
+		return 1;
+	}
+
+	if(time1->hour == time2->hour&&
+	   time1->min > time2->min )
+	{
+		return 1;
+	}
+	if(time1->hour == time2->hour&&
+	   time1->min == time2->min&&
+	   time1->sec > time2->sec) 
+	{
+		return 1;
+	}
+	return -1;
+}
+void timeadd(DATE* sum,DATE* add1)
+{
+	sum->sec += add1->sec;
+	sum->min += sum->sec / 60;
+	sum->sec = sum->sec % 60;
+	
+	sum->min += add1->min;
+	sum->hour +=  sum->min / 60;
+	sum->min = sum->min % 60;
+
+	sum->hour += add1->hour;
+}
 void timetoclose(DATE* curr,DATE* closetime,DATE* opentime)
 {
-	//setlight(3);
-	if(curr->hour > closetime->hour ||
-	   curr->hour < opentime->hour	) 
+	if(timecmp(closetime,opentime) > 0)
 	{
-		//setlight(0);
-		lightvalue=0;
-		timeout = 1;
-		return;
+		if(timecmp(curr,opentime) >0)
+		{
+			timeout = 0;	
+		}
+		if(timecmp(curr,closetime))
+		{
+			timeout=1;
+			lightvalue=0;
+			return;		
+		}		
 	}
-
-	if(curr->hour==closetime->hour&&
-	   curr->hour == opentime->hour&&
-	   curr->min>closetime->min ||
-	   curr->min < opentime->min)
+	else
 	{
-		//setlight(0);
-		lightvalue=0;
-		timeout = 1;
-		return;
-	}
-
-	if(curr->hour==closetime->hour&&
-	   curr->hour == opentime->hour&&
-	   curr->min==closetime->min&&
-	   curr->min == opentime->min&&
-	   curr->sec > closetime->sec||
-	   curr->sec < opentime->sec
-		) 
-	{
-		lightvalue=0;//setlight(0);
-		timeout = 1;
-		return;
-	}
-	timeout = 0;	
+		if(timecmp(curr,opentime) < 0 && 
+			timecmp(curr,closetime) > 0)
+		{
+			//未到开灯时间
+			timeout=1;
+			lightvalue=0;
+			return;
+		}
+		timeout = 0;	
+	}		
 }
 
 void numberctrl(unsigned char num)

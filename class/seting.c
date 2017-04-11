@@ -55,11 +55,12 @@ char setclosetime(DATE* closetime)
 }  	
 void setcurrenttime(DATE* curr)
 {
-	if(setclosetime(curr)==0)
+	DATE currtime;
+	if(setclosetime(&currtime)==0)
 	{
-		DS1302_SetTime(DS1302_HOUR,curr->hour);	//??????????10??54??30
-		DS1302_SetTime(DS1302_MINUTE,curr->min);
-		DS1302_SetTime(DS1302_SECOND,curr->sec);
+		DS1302_SetTime(DS1302_HOUR,currtime.hour);	//??????????10??54??30
+		DS1302_SetTime(DS1302_MINUTE,currtime.min);
+		DS1302_SetTime(DS1302_SECOND,currtime.sec);
 	} 	
 }
 void setopentime(DATE* opentime)
