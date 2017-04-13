@@ -14,17 +14,22 @@ void controllerinit()
 	DS1302_SetTime(DS1302_MINUTE,54);
 	DS1302_SetTime(DS1302_SECOND,30); 
 	dbinit();
+
 	closetime.hour = 0;
 	closetime.min = 0;
 	closetime.sec = 0;  
 
+	opentime.hour = 0;
+	opentime.min = 0;
+	opentime.sec = 0; 
+
   	LCD_init();  //初始化LCD模块 
 	LCDcls(); //清屏幕	
 }
-void setparas(char*list)
-{
-
-}
+//void setparas(char*list)
+//{
+//
+//}
 void parafilter(unsigned char* list,char size)
 {
 	char i=0;
@@ -133,7 +138,7 @@ void uiupdater()
 	{
 		
 		if(lvsecond==0) showtimeval(&currenttime,"-TIME-NOW-");
-		setcurrenttime(&currenttime);
+		setcurrenttime();
 	}
 	else if(_page == 3)
 	{

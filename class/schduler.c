@@ -13,6 +13,7 @@ void sch1s()
 {
 	uiupdater();
 	getcutrrenttime();
+	lightctrl(paralist,3);
 	timectrl();//根据时间关灯
 } 
 void sch02s()

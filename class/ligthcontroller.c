@@ -2,6 +2,7 @@
 
 char lightvalue = 0;
 bit timeout = 1;
+bit lightsval[4];//µÆ×´Ì¬Ó³Éä
 
 void setlight(char para)
 {  	
@@ -17,6 +18,18 @@ void timectrl()
 	timetoclose(&currenttime,&closetime,&opentime);
 	numberctrl(number);
 	setlight(lightvalue);		
+}
+void lightctrl(char*para,unsigned char size)
+{
+	unsigned char index=0;
+	lightvalue = 0;
+	for(index=0;index<size;index++)
+	{
+		if(para[index] > 5)
+		{
+			lightvalue++;
+		}
+	}
 }
 char timecmp(DATE* time1,DATE* time2)
 {
@@ -38,32 +51,30 @@ char timecmp(DATE* time1,DATE* time2)
 	}
 	return -1;
 }
-void timeadd(DATE* sum,DATE* add1)
-{
-	sum->sec += add1->sec;
-	sum->min += sum->sec / 60;
-	sum->sec = sum->sec % 60;
-	
-	sum->min += add1->min;
-	sum->hour +=  sum->min / 60;
-	sum->min = sum->min % 60;
-
-	sum->hour += add1->hour;
-}
+//void timeadd(DATE* sum,DATE* add1)
+//{
+//	sum->sec += add1->sec;
+//	sum->min += sum->sec / 60;
+//	sum->sec = sum->sec % 60;
+//	
+//	sum->min += add1->min;
+//	sum->hour +=  sum->min / 60;
+//	sum->min = sum->min % 60;
+//
+//	sum->hour += add1->hour;
+//}
 void timetoclose(DATE* curr,DATE* closetime,DATE* opentime)
 {
 	if(timecmp(closetime,opentime) > 0)
 	{
-		if(timecmp(curr,opentime) >0)
+		if(timecmp(curr,opentime) >0&&
+		timecmp(curr,closetime) <0 )
 		{
-			timeout = 0;	
-		}
-		if(timecmp(curr,closetime))
-		{
-			timeout=1;
-			lightvalue=0;
+			timeout = 0;
 			return;		
-		}		
+		}
+		timeout=1;
+		lightvalue=0;		
 	}
 	else
 	{
@@ -82,6 +93,9 @@ void timetoclose(DATE* curr,DATE* closetime,DATE* opentime)
 void numberctrl(unsigned char num)
 {
 	 if(timeout)return;
-	 lightvalue = num;
+	 if(num <= lightvalue)
+	 {
+	 	lightvalue = num;
+	 }
 }
 

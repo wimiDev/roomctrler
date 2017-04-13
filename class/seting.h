@@ -4,6 +4,6 @@
 
 extern char setclosetime(void*);
 extern void setopentime(void*);
-extern void setcurrenttime(void*);
+extern void setcurrenttime();
 extern char inputbox();
 #endif

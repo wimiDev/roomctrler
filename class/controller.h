@@ -23,7 +23,7 @@ extern unsigned char lvsecond;//二级菜单，0表示未在二级菜单
 extern unsigned char paralist[4]; 
 extern unsigned char number;
 extern void controllerinit();
-extern void setparas(char*list);
+//extern void setparas(char*list);
 extern void parafilter(unsigned char* list,char size);
 extern void getcutrrenttime();
 extern void showtimeval(DATE* time,char*name);

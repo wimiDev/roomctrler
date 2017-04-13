@@ -1,5 +1,6 @@
 #include"seting.h"
 char inputval = 0;
+DATE _currtime;
 char setclosetime(DATE* closetime)
 {
 	char str[30];
@@ -53,14 +54,13 @@ char setclosetime(DATE* closetime)
 	} 
 	return -1;
 }  	
-void setcurrenttime(DATE* curr)
-{
-	DATE currtime;
-	if(setclosetime(&currtime)==0)
+void setcurrenttime()
+{	
+	if(setclosetime(&_currtime)==0)
 	{
-		DS1302_SetTime(DS1302_HOUR,currtime.hour);	//??????????10??54??30
-		DS1302_SetTime(DS1302_MINUTE,currtime.min);
-		DS1302_SetTime(DS1302_SECOND,currtime.sec);
+		DS1302_SetTime(DS1302_HOUR,_currtime.hour);	
+		DS1302_SetTime(DS1302_MINUTE,_currtime.min);
+		DS1302_SetTime(DS1302_SECOND,_currtime.sec);
 	} 	
 }
 void setopentime(DATE* opentime)
