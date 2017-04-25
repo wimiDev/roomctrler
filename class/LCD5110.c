@@ -3,6 +3,7 @@
 POINT slipos;
 unsigned char drawindex=0;
 char drawbuf[30];
+char drawnowbuf[30];
 
 unsigned char code numcode[]={
 /*--  ÎÄ×Ö:  0  --*/
@@ -413,11 +414,25 @@ void LCDwritechar(unsigned char row, unsigned char page,unsigned char c) //row:Á
 		LCD_write_byte(numcode[c*16+i],1); 
 	}
 	
-    LCD_set_XY(row*8, page+1);// ÁÐ£¬Ò³ 
+   LCD_set_XY(row*8, page+1);// ÁÐ£¬Ò³ 
 	for(i=8; i<16;i++) 
 	{
 		LCD_write_byte(numcode[c*16+i],1);
 	}	 	
+}
+void LCDclearpos(unsigned char row, unsigned char page)
+{
+	unsigned char i;  	
+	LCD_set_XY(row*8, page);// ÁÐ£¬Ò³ 
+	for(i=0; i<8;i++) 
+	{
+		LCD_write_byte(0x00,1); 
+	}
+  LCD_set_XY(row*8, page+1);// ÁÐ£¬Ò³ 
+	for(i=8; i<16;i++) 
+	{
+		LCD_write_byte(0x00,1);
+	}	 
 }
 void cleandrawbuf()
 {
@@ -425,14 +440,15 @@ void cleandrawbuf()
 	while(index<30)
 	{
 		drawbuf[index] = 0;
+		drawnowbuf[index]=0;
 		index++;
 	}	
 }
-void LCDdraw(char*_drawbuf)
+void LCDdraw(char*_drawbuf,char* _drawnow)
 {
 	unsigned char index =0 ; 
 	unsigned char x=0,y=0;
-	LCD_clear(); //ÇåÆÁÄ»
+	//LCD_clear(); //ÇåÆÁÄ»
 	for(index = 0;index<30;index++)
 	{
 		//Ã¿ÐÐÐ´10¸ö×Ö·û
@@ -442,27 +458,48 @@ void LCDdraw(char*_drawbuf)
 			y =y % 5;
 			x = 0;	
 		}
-		if (_drawbuf[index]>='0'&&_drawbuf[index]<127)
+		if(_drawnow[index] == _drawbuf[index]) 
 		{
-			LCDwritechar(x,y,_drawbuf[index]-'0');
+			x++;
+			continue;
 		}
-		x++;
+			_drawnow[index] = _drawbuf[index];
+			if (_drawbuf[index] >= '0' &&_drawbuf[index]<127)
+			{
+				LCDwritechar(x,y,_drawbuf[index]-'0');
+			}
+			else
+			{
+				LCDclearpos(x,y);
+			}
+			x++;
 	}
-
 }
 void LCDcls()
 {
 	cleandrawbuf();
 	drawindex = 0;
-	LCDdraw(drawbuf);
+	LCD_clear();
+	//LCDdraw(drawbuf,drawnowbuf);
 }
-void LCDprintf(char*str)
+void LCDprintf(char*str,char pos)
 {
+//	char index =0;
+	if(pos >= 0) 
+	{
+		drawindex = pos;
+		//LCD_clear();
+	}
 	while(*str)
 	{
 		drawbuf[drawindex] = *str;
 		str++;
 		drawindex = ++ drawindex % 30;		
 	}
-	LCDdraw(drawbuf);
+//		while(index < 30)
+//		{
+//			drawbuf[index] = 0;
+//			index++;
+//		}
+	LCDdraw(drawbuf,drawnowbuf);
 }

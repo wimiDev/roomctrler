@@ -1,10 +1,10 @@
-C51 COMPILER V9.00   CONTROLLER                                                            04/12/2017 11:23:47 PAGE 1   
+C51 COMPILER V9.54   CONTROLLER                                                            04/25/2017 20:43:53 PAGE 1   
 
 
-C51 COMPILER V9.00, COMPILATION OF MODULE CONTROLLER
+C51 COMPILER V9.54, COMPILATION OF MODULE CONTROLLER
 OBJECT MODULE PLACED IN controller.obj
-COMPILER INVOKED BY: I:\program\keil\C51\BIN\C51.EXE class\controller.c LARGE BROWSE DEBUG OBJECTEXTEND PRINT(.\controll
-                    -er.lst) OBJECT(controller.obj)
+COMPILER INVOKED BY: J:\program\keil\C51\BIN\C51.EXE class\controller.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEN
+                    -D PRINT(.\controller.lst) TABS(2) OBJECT(controller.obj)
 
 line level    source
 
@@ -12,215 +12,278 @@ line level    source
    2          unsigned char paralist[4];
    3          unsigned char _page = 0;
    4          unsigned char lvsecond = 0;
-   5           unsigned char number = 0;
-   6          DATE currenttime;
-   7          DATE closetime;//关灯时间
-   8          DATE opentime;//开灯时间
-   9          
-  10          void controllerinit()
-  11          {               
-  12   1              Initial_DS1302();
-  13   1              DS1302_SetTime(DS1302_HOUR,10); //??????????10??54??30
-  14   1              DS1302_SetTime(DS1302_MINUTE,54);
-  15   1              DS1302_SetTime(DS1302_SECOND,30); 
-  16   1              dbinit();
-  17   1      
-  18   1              closetime.hour = 0;
-  19   1              closetime.min = 0;
-  20   1              closetime.sec = 0;  
-  21   1      
-  22   1              opentime.hour = 0;
-  23   1              opentime.min = 0;
-  24   1              opentime.sec = 0; 
+   5          unsigned char number = 0;
+   6          char trybee = 0;
+   7          bit enablebee = 1;
+   8          DATE currenttime;
+   9          DATE closetime;//关灯时间
+  10          DATE opentime;//开灯时间
+  11          
+  12          void controllerinit()
+  13          {  
+  14   1        _BEEBEE = 0;
+  15   1        Initial_DS1302();
+  16   1        DS1302_SetTime(DS1302_HOUR,10); //??????????10??54??30
+  17   1        DS1302_SetTime(DS1302_MINUTE,54);
+  18   1        DS1302_SetTime(DS1302_SECOND,30); 
+  19   1        dbinit();
+  20   1        LCD_init();  //初始化LCD模块 
+  21   1        LCDcls(); //清屏幕  
+  22   1        closetime.hour = 0;
+  23   1        closetime.min = 0;
+  24   1        closetime.sec = 0;  
   25   1      
-  26   1              LCD_init();  //初始化LCD模块 
-  27   1              LCDcls(); //清屏幕      
-  28   1      }
-  29          //void setparas(char*list)
-  30          //{
-  31          //
-  32          //}
-  33          void parafilter(unsigned char* list,char size)
-  34          {
-  35   1              char i=0;
-  36   1              //char sendstr[30];
-  37   1              unsigned char val = 0;
-  38   1              char id =  list[0]-'0';
-  39   1              if (RevTempDate0[0]==0)
-  40   1              {
-  41   2                      return;
-  42   2              }
-  43   1              for(i=1;i<size;i++)
-  44   1              {
-  45   2                      val = (val*10)+(list[i]-'0');           
-  46   2              }
-  47   1              if(id==1)
-  48   1              {
-  49   2                      paralist[0] = val;      
-  50   2              }
-  51   1              else if(id==2)
-  52   1              {
-  53   2                      paralist[1] = val;      
-  54   2              } 
-C51 COMPILER V9.00   CONTROLLER                                                            04/12/2017 11:23:47 PAGE 2   
+  26   1        opentime.hour = 0;
+  27   1        opentime.min = 0;
+  28   1        opentime.sec = 0; 
+  29   1        beebee(3);
+  30   1      }
+  31          
+  32          void parafilter(unsigned char* list,char size)
+  33          {
+  34   1        char i=0;
+  35   1        unsigned char val = 0;
+  36   1        char id =  list[0]-'0';
+  37   1        if (RevTempDate0[0]==0)
+  38   1        {
+  39   2          return;
+  40   2        }
+  41   1        for(i=1;i<size;i++)
+  42   1        {
+  43   2          val = (val*10)+(list[i]-'0');   
+  44   2        }
+  45   1        if(id==1)
+  46   1        {
+  47   2          paralist[0] = val;  
+  48   2        }
+  49   1        else if(id==2)
+  50   1        {
+  51   2          paralist[1] = val;  
+  52   2        } 
+  53   1        else if(id==3)
+  54   1        {
+C51 COMPILER V9.54   CONTROLLER                                                            04/25/2017 20:43:53 PAGE 2   
 
-  55   1              else if(id==3)
-  56   1              {
-  57   2                      paralist[2] = val;      
-  58   2              }
-  59   1              else if(id==4)
-  60   1              {
-  61   2                      paralist[3] = val;
-  62   2              }
-  63   1              else
-  64   1              {
-  65   2                      for(i=0;i<5;++i)
-  66   2                      {
-  67   3                              RevTempDate0[i] = 0;    
-  68   3                      }
-  69   2                      return;
-  70   2              }       
-  71   1              //置空接收区
-  72   1              for(i=0;i<5;++i)
-  73   1              {
-  74   2                      RevTempDate0[i] = 0;    
-  75   2              }
-  76   1      }
-  77          void getcutrrenttime()
-  78          {  
-  79   1      //      char str[20];
-  80   1              SYSTEMTIME CurrentTime;
-  81   1              DS1302_GetTime(&CurrentTime);
-  82   1              //DateToStr(&CurrentTime);
-  83   1              TimeToStr(&CurrentTime);
-  84   1              currenttime.hour=CurrentTime.Hour;
-  85   1              currenttime.min=CurrentTime.Minute;
-  86   1              currenttime.sec=CurrentTime.Second;
-  87   1      //      sprintf(str,"[%d:%d:%d]",(int)currenttime.hour,(int)currenttime.min,(int)currenttime.sec);
-  88   1      //      //SendString(str);
-  89   1      //      LCDcls();
-  90   1      //      LCDprintf("-TIME-NOW-");
-  91   1      //      LCDprintf(str);
-  92   1      }
-  93          void showtimeval(DATE* time,char*name)
-  94          {
-  95   1               char str[20];
-  96   1               sprintf(str,"[%d:%d:%d]",(int)time->hour,(int)time->min,(int)time->sec);
-  97   1              //SendString(str);
-  98   1              LCDcls();
-  99   1              LCDprintf(name);
- 100   1              LCDprintf(str);
- 101   1      }
- 102          void trunpage()
- 103          {
- 104   1              if(lvsecond==0)
- 105   1              {
- 106   2                      if(getkey(0)==15)
- 107   2                      {
- 108   3                      //上翻页
- 109   3                              _page++;
- 110   3                              if (_page >= MAXPAGE) _page = 0;
- 111   3                      }
- 112   2                      if(getkey(0)==11)
- 113   2                      {
- 114   3                      //下翻页
- 115   3                              --_page;
- 116   3                              if (_page>MAXPAGE-1)    _page = MAXPAGE-1;
-C51 COMPILER V9.00   CONTROLLER                                                            04/12/2017 11:23:47 PAGE 3   
+  55   2          paralist[2] = val;  
+  56   2        }
+  57   1        else if(id==4)
+  58   1        {
+  59   2          paralist[3] = val;
+  60   2        }
+  61   1        else
+  62   1        {
+  63   2          for(i=0;i<5;++i)
+  64   2          {
+  65   3            RevTempDate0[i] = 0;  
+  66   3          }
+  67   2          return;
+  68   2        } 
+  69   1        //置空接收区
+  70   1        for(i=0;i<5;++i)
+  71   1        {
+  72   2          RevTempDate0[i] = 0;  
+  73   2        }
+  74   1      }
+  75          void getcutrrenttime()
+  76          {  
+  77   1        SYSTEMTIME CurrentTime;
+  78   1        DS1302_GetTime(&CurrentTime);
+  79   1        TimeToStr(&CurrentTime);
+  80   1        currenttime.hour=CurrentTime.Hour;
+  81   1        currenttime.min=CurrentTime.Minute;
+  82   1        currenttime.sec=CurrentTime.Second;
+  83   1      }
+  84          void showtimeval(DATE* time,char*name)
+  85          {
+  86   1         char str[20];
+  87   1         sprintf(str,"[%d:%d:%d]",(int)time->hour,(int)time->min,(int)time->sec);
+  88   1         //LCDcls();
+  89   1         LCDprintf(name,0);
+  90   1         LCDprintf(str,-1);
+  91   1      }
+  92          void trunpage()
+  93          {
+  94   1        if(lvsecond == 0)
+  95   1        {
+  96   2          if(getkey(0)==15)
+  97   2          {
+  98   3          //上翻页
+  99   3            _page++;
+ 100   3            if (_page >= MAXPAGE) _page = 0;
+ 101   3            beebee(1);
+ 102   3            LCDcls();
+ 103   3          }
+ 104   2          if(getkey(0)==11)
+ 105   2          {
+ 106   3          //下翻页
+ 107   3            --_page;
+ 108   3            if (_page>MAXPAGE-1)  _page = MAXPAGE-1;
+ 109   3            beebee(1);
+ 110   3            LCDcls();
+ 111   3          }
+ 112   2        }
+ 113   1      }
+ 114          void uiupdater()
+ 115          {
+ 116   1        char sendstr[30];
+C51 COMPILER V9.54   CONTROLLER                                                            04/25/2017 20:43:53 PAGE 3   
 
- 117   3                      }
- 118   2              }
- 119   1      }
- 120          void uiupdater()
- 121          {
- 122   1              char sendstr[30];
- 123   1              trunpage();
- 124   1              if (_page == 0)
- 125   1              { 
- 126   2                      LCDcls();
- 127   2                      LCDprintf("--wellcom-----use----WIMI-DEV-");    
- 128   2              }
- 129   1              else if (_page==1)
- 130   1              {
- 131   2                      sprintf(sendstr,"a%d,b%d,c%d,d%d",(int)paralist[0],
- 132   2                                 (int)paralist[1],(int)paralist[2],(int)paralist[3]);
- 133   2                      //SendString(sendstr);
- 134   2                      LCDcls();
- 135   2                      LCDprintf(sendstr);     
- 136   2              }
- 137   1              else if (_page==2)
- 138   1              {
- 139   2                      
- 140   2                      if(lvsecond==0) showtimeval(&currenttime,"-TIME-NOW-");
- 141   2                      setcurrenttime();
- 142   2              }
- 143   1              else if(_page == 3)
- 144   1              {
- 145   2                      setclosetime(&opentime);
- 146   2                      if(lvsecond==0) showtimeval(&opentime,"OPEN-TIME-");
- 147   2                      //if(timecmp(opentime,))        
- 148   2              }
- 149   1              else if(_page == 4)
- 150   1              {
- 151   2                      setclosetime(&closetime);
- 152   2                      if(lvsecond==0) showtimeval(&closetime,"-OFF-TIME-");
- 153   2              }       
- 154   1              getkey(1);
- 155   1      }
- 156          void cashcard(unsigned char *resdata)
- 157          {
- 158   1              unsigned char index = 0; 
- 159   1              unsigned char len = getuartbuflen();
- 160   1              unsigned char idsta[10]; 
- 161   1              unsigned char insertindex = 0;
- 162   1              unsigned char selectindex = 0;
- 163   1              char str[20]="cashcard"; 
- 164   1              if(getreaded()) return;//没有数据更新
- 165   1              LCDcls();
- 166   1              for(index=0;index< len;index++)
- 167   1              {       
- 168   2                      if(index>4&&index<len)
- 169   2                      { 
- 170   3                              idsta[index-5] = *(resdata+index);      
- 171   3                      }
- 172   2                      setread(1);
- 173   2                      *(resdata+index) = 0;//清空数据
- 174   2              }
- 175   1              selectindex =  selectid(idsta);
- 176   1              if(selectindex != UNKNOWERROR)
- 177   1              {
- 178   2                      //查找到了
-C51 COMPILER V9.00   CONTROLLER                                                            04/12/2017 11:23:47 PAGE 4   
+ 117   1        trunpage();
+ 118   1        if (_page == 0)
+ 119   1        { 
+ 120   2          //LCDcls();
+ 121   2          LCDprintf("--wellcom-----use----WIMI-DEV-",0);  
+ 122   2        }
+ 123   1        else if (_page==1)
+ 124   1        {
+ 125   2          sprintf(sendstr,"a%d,b%d,c%d,d%d",(int)paralist[0],
+ 126   2               (int)paralist[1],(int)paralist[2],(int)paralist[3]);
+ 127   2          //LCDcls();
+ 128   2          LCDprintf(sendstr,0); 
+ 129   2        }
+ 130   1        else if (_page==2)
+ 131   1        {
+ 132   2          if(lvsecond==0) showtimeval(&currenttime,"-TIME-NOW-");
+ 133   2          setcurrenttime();
+ 134   2        }
+ 135   1        else if(_page == 3)
+ 136   1        {
+ 137   2          setclosetime(&opentime);
+ 138   2          if(lvsecond==0) showtimeval(&opentime,"OPEN-TIME-");
+ 139   2          //if(timecmp(opentime,))  
+ 140   2        }
+ 141   1        else if(_page == 4)
+ 142   1        {
+ 143   2          setclosetime(&closetime);
+ 144   2          if(lvsecond==0) showtimeval(&closetime,"-OFF-TIME-");
+ 145   2        } 
+ 146   1        else if(_page == 5)
+ 147   1        {
+ 148   2          if(lvsecond==0)showbeeable();
+ 149   2          setbeeanle();
+ 150   2        }
+ 151   1        else if(_page == 6)
+ 152   1        {
+ 153   2          showlightsta();
+ 154   2        }
+ 155   1        getkey(1);
+ 156   1      }
+ 157          void cashcard(unsigned char *resdata)
+ 158          {
+ 159   1        unsigned char index = 0; 
+ 160   1        unsigned char len = getuartbuflen();
+ 161   1        unsigned char idsta[10]; 
+ 162   1        unsigned char insertindex = 0;
+ 163   1        unsigned char selectindex = 0;
+ 164   1        char str[20] = "cashcard"; 
+ 165   1        if(getreaded()== 1 ) return;//没有数据更新
+ 166   1        LCDcls();
+ 167   1        if(getreaded() == -1)
+ 168   1        {
+ 169   2          beebee(5);
+ 170   2          sprintf(str,"SUPPORT-ID-CARD-ONLY!");
+ 171   2          LCDprintf(str,0);
+ 172   2          setread(1);
+ 173   2          return;
+ 174   2        }
+ 175   1        beebee(2);
+ 176   1        for(index=0;index< len;index++)
+ 177   1        { 
+ 178   2          if(index<len)//index>4&&
+C51 COMPILER V9.54   CONTROLLER                                                            04/25/2017 20:43:53 PAGE 4   
 
- 179   2                      number--;
- 180   2                      delectidbyindex(selectindex);
- 181   2                      sprintf(str,"NO.%d-OUT-;number is.%d.",(int)selectindex,(int)number);
- 182   2              }
- 183   1              else
- 184   1              {
- 185   2                      //没有找到
- 186   2                      insertindex = insertid(idsta);
- 187   2                      if(insertindex == UNKNOWERROR) 
- 188   2                      {
- 189   3                              LCDprintf("--FULL--");
- 190   3                              LCDprintf("--callme--13077661594");
- 191   3                              return;
- 192   3                      } 
- 193   2                      number++;
- 194   2                      sprintf(str,"NO.%d-IN-;number is。%d。",(int)insertindex,(int)number);
- 195   2              }
- 196   1              LCDprintf(str); 
- 197   1      }
+ 179   2          { 
+ 180   3            idsta[index] = *(resdata+index);//-5  
+ 181   3          }
+ 182   2          *(resdata+index) = 0;//清空数据
+ 183   2        }
+ 184   1        selectindex =  selectid(idsta);
+ 185   1        if(selectindex != UNKNOWERROR)
+ 186   1        {
+ 187   2          //查找到了
+ 188   2          number--;
+ 189   2          delectidbyindex(selectindex);
+ 190   2          sprintf(str,"NO.%d-OUT-;number is.%d.",(int)selectindex,(int)number);
+ 191   2        }
+ 192   1        else
+ 193   1        {
+ 194   2          //没有找到
+ 195   2          insertindex = insertid(idsta);
+ 196   2          if(insertindex == UNKNOWERROR) 
+ 197   2          {
+ 198   3            LCDprintf("--FULL--",0);
+ 199   3            LCDprintf("--callme--13077661594",-1);
+ 200   3            return;
+ 201   3          } 
+ 202   2          number++;
+ 203   2          sprintf(str,"NO.%d-IN-;number is。%d。",(int)insertindex,(int)number);
+ 204   2        }
+ 205   1        LCDprintf(str,0);
+ 206   1        setread(1);
+ 207   1      }
+ 208          void beebee(char inval)
+ 209          {
+ 210   1        trybee = inval;
+ 211   1        beehandler();
+ 212   1      }
+ 213          void beehandler()
+ 214          {
+ 215   1          if(trybee > 0)
+ 216   1          {
+ 217   2            if(enablebee && trybee%2) _BEEBEE = 1;
+ 218   2            else _BEEBEE = 0; 
+ 219   2            trybee --;
+ 220   2          }
+ 221   1          else
+ 222   1          {
+ 223   2            _BEEBEE = 0;  
+ 224   2          }
+ 225   1      }
+ 226          void showbeeable()
+ 227          {
+ 228   1          char str[30];
+ 229   1          if(enablebee)
+ 230   1          {
+ 231   2            sprintf(str,"BEE-ENABLE----ON----");
+ 232   2          }
+ 233   1          else
+ 234   1          {
+ 235   2            sprintf(str,"BEE-ENABLE----OFF---");
+ 236   2          }
+ 237   1          LCDprintf(str,0);
+ 238   1      }
+ 239          void showlightsta()
+ 240          {
+C51 COMPILER V9.54   CONTROLLER                                                            04/25/2017 20:43:53 PAGE 5   
+
+ 241   1          char str[30];
+ 242   1          char index=0;
+ 243   1          sprintf(str,"---LIGHT--");
+ 244   1          LCDprintf(str,0);
+ 245   1          for(index=0;index<3;index++)
+ 246   1          {
+ 247   2            if(lightstate[index])
+ 248   2            {
+ 249   3              sprintf(str,"%d:%c--",(int)index+1,'O');
+ 250   3              LCDprintf(str,-1);
+ 251   3            }
+ 252   2            else
+ 253   2            {
+ 254   3              sprintf(str,"%d:%c--",(int)index+1,'X');
+ 255   3              LCDprintf(str,-1);
+ 256   3            }
+ 257   2          }
+ 258   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    975    ----
-   CONSTANT SIZE    =    193    ----
-   XDATA SIZE       =     22     123
+   CODE SIZE        =   1353    ----
+   CONSTANT SIZE    =    276    ----
+   XDATA SIZE       =     23     184
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
-   BIT SIZE         =   ----    ----
+   BIT SIZE         =      1    ----
 END OF MODULE INFORMATION.
 
 

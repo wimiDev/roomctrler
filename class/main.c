@@ -2,7 +2,6 @@
 #include"global.h"
 
 unsigned int osclock = 0;
-
 void C51Timer0Init();
 void schdulerswitch();
 
@@ -22,14 +21,11 @@ void main()
 void schdulerswitch()
 {
 	 update();
-	 if(osclock%1000 ==0 )
-	 {
-	 	sch1s();
-	 }
-	 if(osclock%100 == 0)
-	 {
-	 	sch02s();
-	 }
+	 if(osclock%1000 ==0 )sch1s();
+
+	 if(osclock%100 == 0)sch01s();
+
+	 if(osclock%300==0) sch03s();
 }
 void C51Timer0Init()
 {  	

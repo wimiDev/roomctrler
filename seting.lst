@@ -1,10 +1,10 @@
-C51 COMPILER V9.00   SETING                                                                04/12/2017 11:23:47 PAGE 1   
+C51 COMPILER V9.54   SETING                                                                04/25/2017 20:43:55 PAGE 1   
 
 
-C51 COMPILER V9.00, COMPILATION OF MODULE SETING
+C51 COMPILER V9.54, COMPILATION OF MODULE SETING
 OBJECT MODULE PLACED IN seting.obj
-COMPILER INVOKED BY: I:\program\keil\C51\BIN\C51.EXE class\seting.c LARGE BROWSE DEBUG OBJECTEXTEND PRINT(.\seting.lst) 
-                    -OBJECT(seting.obj)
+COMPILER INVOKED BY: J:\program\keil\C51\BIN\C51.EXE class\seting.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PR
+                    -INT(.\seting.lst) TABS(2) OBJECT(seting.obj)
 
 line level    source
 
@@ -13,96 +13,146 @@ line level    source
    3          DATE _currtime;
    4          char setclosetime(DATE* closetime)
    5          {
-*** WARNING C235 IN LINE 5 OF CLASS\SETING.C: parameter 1: different types
-   6   1              char str[30];
-   7   1              //获取输入的键值
-   8   1              char key = getkey(0);
-   9   1              char val = -1;  
-  10   1              if(lvsecond==0)
-  11   1              {
-  12   2                      if (key==3)      
-  13   2                      {
-  14   3                      lvsecond=1;
-  15   3                      key=-1;
-  16   3                      };
-  17   2              }
-  18   1              if(lvsecond==1)
-  19   1              {
-  20   2                      LCDcls();       
-  21   2                      val = inputbox();
-  22   2                      sprintf(str,"inputhour:=%d",(int)val);
-  23   2                      LCDprintf(str);
-  24   2                      if(key==3) {
-  25   3                      lvsecond=2;
-  26   3                      closetime->hour = val;
-  27   3                      key=-1;
-  28   3                      };      
-  29   2              } 
-  30   1              if(lvsecond==2)
-  31   1              {
-  32   2                      LCDcls();       
-  33   2                      val = inputbox();
-  34   2                      sprintf(str,"inputmin:=%d",(int)val);
-  35   2                      LCDprintf(str);
-  36   2                      if(key==3) {
-  37   3                      lvsecond=3;
-  38   3                      closetime->min = val;
-  39   3                      key=-1;
-  40   3                      };      
-  41   2              } 
-  42   1              if(lvsecond==3)
-  43   1              {
-  44   2                      LCDcls();       
-  45   2                      val = inputbox();
-  46   2                      sprintf(str,"inputsec:=%d",(int)val);
-  47   2                      LCDprintf(str);
-  48   2                      if(key==3) {
-  49   3                      lvsecond=0;
-  50   3                      closetime->sec = val;
-  51   3                      key=-1;
-  52   3                      return 0;
-  53   3                      };      
-C51 COMPILER V9.00   SETING                                                                04/12/2017 11:23:47 PAGE 2   
+*** WARNING C235 IN LINE 5 OF class\seting.c: parameter 1: different types
+   6   1        char str[30];
+   7   1        //获取输入的键值
+   8   1        char key = getkey(0);
+   9   1        char val = -1;  
+  10   1        if(lvsecond==0)
+  11   1        {
+  12   2          if (key==3)  
+  13   2          {
+  14   3            beebee(1);
+  15   3            lvsecond=1;
+  16   3            key=-1;
+  17   3          };
+  18   2        }
+  19   1        if(lvsecond==1)
+  20   1        {
+  21   2          LCDcls();   
+  22   2          val = inputbox();
+  23   2          sprintf(str,"inputhour:=%d",(int)val);
+  24   2          LCDprintf(str,0);
+  25   2          if(key==3) {
+  26   3            beebee(1);
+  27   3            lvsecond=2;
+  28   3            closetime->hour = val;
+  29   3            key=-1;
+  30   3          };  
+  31   2        } 
+  32   1        if(lvsecond==2)
+  33   1        {
+  34   2          LCDcls();   
+  35   2          val = inputbox();
+  36   2          sprintf(str,"inputmin:=%d",(int)val);
+  37   2          LCDprintf(str,0);
+  38   2          if(key==3) {
+  39   3            beebee(1);
+  40   3            lvsecond=3;
+  41   3            closetime->min = val;
+  42   3            key=-1;
+  43   3          };  
+  44   2        } 
+  45   1        if(lvsecond==3)
+  46   1        {
+  47   2          LCDcls();   
+  48   2          val = inputbox();
+  49   2          sprintf(str,"inputsec:=%d",(int)val);
+  50   2          LCDprintf(str,0);
+  51   2          if(key==3) {
+  52   3          beebee(1);
+  53   3          lvsecond=0;
+C51 COMPILER V9.54   SETING                                                                04/25/2017 20:43:55 PAGE 2   
 
-  54   2              } 
-  55   1              return -1;
-  56   1      }       
-  57          void setcurrenttime()
-  58          {       
-  59   1              if(setclosetime(&_currtime)==0)
-  60   1              {
-  61   2                      DS1302_SetTime(DS1302_HOUR,_currtime.hour);     
-  62   2                      DS1302_SetTime(DS1302_MINUTE,_currtime.min);
-  63   2                      DS1302_SetTime(DS1302_SECOND,_currtime.sec);
-  64   2              }       
-  65   1      }
-  66          void setopentime(DATE* opentime)
-  67          {
-*** WARNING C235 IN LINE 67 OF CLASS\SETING.C: parameter 1: different types
-  68   1              setclosetime(opentime);
-  69   1      }
-  70          char inputbox()
-  71          {
-  72   1              char key = getkey(0); 
-  73   1              if(key!=-1&&getnumber(key)!=-1)
-  74   1              {
-  75   2                      inputval = (inputval*10 + getnumber(key));
-  76   2              } 
-  77   1      //      //确定
-  78   1      //      if(key==3)return inputval;
-  79   1              if(key==14)
-  80   1              {
-  81   2                      //退格
-  82   2                      inputval = (inputval-inputval%10)/10;           
-  83   2              }       
-  84   1              return inputval;
-  85   1      }
+  54   3          closetime->sec = val;
+  55   3          key=-1;
+  56   3          LCDcls(); 
+  57   3          LCDprintf("----------Waiting",0);
+  58   3          return 0;
+  59   3          };  
+  60   2        } 
+  61   1        return -1;
+  62   1      }   
+  63          void setcurrenttime()
+  64          { 
+  65   1        if(setclosetime(&_currtime)==0)
+  66   1        {
+  67   2          DS1302_SetTime(DS1302_HOUR,_currtime.hour); 
+  68   2          DS1302_SetTime(DS1302_MINUTE,_currtime.min);
+  69   2          DS1302_SetTime(DS1302_SECOND,_currtime.sec);
+  70   2        }   
+  71   1      }
+  72          void setopentime(DATE* opentime)
+  73          {
+*** WARNING C235 IN LINE 73 OF class\seting.c: parameter 1: different types
+  74   1        setclosetime(opentime);
+  75   1      }
+  76          char inputbox()
+  77          {
+  78   1        char key = getkey(0); 
+  79   1        if(key!=-1&&getnumber(key)!=-1)
+  80   1        {
+  81   2          inputval = (inputval*10 + getnumber(key));
+  82   2        } 
+  83   1      //  //确定
+  84   1      //  if(key==3)return inputval;
+  85   1        if(key==14)
+  86   1        {
+  87   2          //退格
+  88   2          inputval = (inputval-inputval%10)/10;   
+  89   2        }   
+  90   1        return inputval;
+  91   1      }
+  92          void setbeeanle()
+  93          {
+  94   1          char str[30];
+  95   1        //获取输入的键值
+  96   1          char key = getkey(0);
+  97   1          if (key == 3 && lvsecond == 0)   
+  98   1          {
+  99   2            lvsecond = 4;
+ 100   2            LCDcls(); 
+ 101   2            key = -1;
+ 102   2          }
+ 103   1          if(lvsecond == 4)
+ 104   1          {
+ 105   2              if(key==15)
+ 106   2              {
+ 107   3              //上翻页
+ 108   3                enablebee = ~enablebee;
+ 109   3              }
+ 110   2              if(key==11)
+ 111   2              {
+ 112   3              //下翻页
+ 113   3                enablebee = ~enablebee;
+ 114   3              }
+C51 COMPILER V9.54   SETING                                                                04/25/2017 20:43:55 PAGE 3   
+
+ 115   2              if(enablebee)
+ 116   2              {
+ 117   3                sprintf(str,"SET--BEE----ON----");
+ 118   3                LCDprintf(str,0);
+ 119   3              }
+ 120   2              else
+ 121   2              {
+ 122   3                sprintf(str,"SET--BEE----OFF---");
+ 123   3                LCDprintf(str,0);
+ 124   3              }
+ 125   2              if (key == 3)
+ 126   2              {
+ 127   3                lvsecond=0;
+ 128   3                key = -1;
+ 129   3                beebee(3);
+ 130   3              }
+ 131   2              
+ 132   2          }
+ 133   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    503    ----
-   CONSTANT SIZE    =     40    ----
-   XDATA SIZE       =      6      36
+   CODE SIZE        =    670    ----
+   CONSTANT SIZE    =     96    ----
+   XDATA SIZE       =      6      67
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

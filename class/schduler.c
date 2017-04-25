@@ -2,10 +2,9 @@
 
 void update()
 {
-	//char sendstr[20];
 	char i=0;
 	NRFSetRXMode();//设置为接收模式
-	GetDate();//开始接受数	 	
+	GetDate();//开始接收数据 	
 	parafilter(RevTempDate0,RX_DATA_WITDH);
 }
 
@@ -15,9 +14,14 @@ void sch1s()
 	getcutrrenttime();
 	lightctrl(paralist,3);
 	timectrl();//根据时间关灯
+	
 } 
-void sch02s()
+void sch01s()
 {	
 	cashcard(getuartbuf());
 	keyhandler();
+}
+void sch03s()
+{
+	beehandler();
 }

@@ -14,12 +14,9 @@ typedef unsigned int WORD;
 #define EVEN_PARITY     2       //偶校验
 #define MARK_PARITY     3       //标记校验
 #define SPACE_PARITY    4       //空白校验	 
-#define BUFLENG 15
+#define BUFLENG 25
 
 #define PARITYBIT NONE_PARITY   //定义校验位
-
-
-
 
 sfr T2H   = 0xd6;               //定时器2高8位
 sfr T2L   = 0xd7;               //定时器2低8位
@@ -33,10 +30,12 @@ extern unsigned char _uartrecvindex;
 extern unsigned char uartrecv[16];
 extern char _readed;
 extern bit busy;
-//extern CASHCALLBACK _cashcallback;
+extern unsigned char _starttag[5];
+
 void uartinit();
 void SendData(BYTE dat);
 void SendString(char *s);
+void _handlercash();
 extern unsigned char* getuartbuf();
 extern unsigned char getuartbuflen();
 extern char getreaded();

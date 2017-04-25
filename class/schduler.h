@@ -6,7 +6,8 @@ extern void update();
 
 extern void sch1s(); 
 
-extern void sch02s();
+extern void sch01s();
+extern void sch03s();
 
 
 #endif

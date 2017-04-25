@@ -3,7 +3,7 @@
  unsigned char uartrecv[16];
  unsigned char _uartrecvindex = 0;
  char _readed = 1;
-// CASHCALLBACK _cashcallback;
+ unsigned char _starttag[5] = {0x7F,0x0E,0x00,0xA0,0x00};
 
 void uartinit()
 {
@@ -44,15 +44,7 @@ void Uart() interrupt 4 using 1
     if (RI)
     {
         RI = 0;                 //清除RI位
-		uartrecv[_uartrecvindex] = SBUF;
-		setread(0);
-		_uartrecvindex++;
-		if (_uartrecvindex > 15)
-		{
-			_uartrecvindex = 0;
-			//接收数据完毕
-//			_cashcallback(uartrecv);
-		}
+				_handlercash();
     }
     if (TI)
     {
@@ -113,7 +105,31 @@ char getreaded()
 }
 void setread(char read)
 {
-	if(read) _uartrecvindex = 0;
+	if(read==1) _uartrecvindex = 0;
    _readed = read;
 }
-
+void _handlercash()
+{
+		char _recvbuf = 0;
+		if(getreaded() != 1) 
+		{
+			return;//数据尚未处理
+		}
+		_recvbuf = SBUF;
+		if(_uartrecvindex < 5 && (_recvbuf != _starttag[_uartrecvindex]))
+		{
+			_uartrecvindex = 0;
+			setread(-1);//非法数据
+			return;
+		}
+		if(_uartrecvindex >= 5)uartrecv[_uartrecvindex - 5] = _recvbuf;
+		_uartrecvindex++;
+		//if(_uartrecvindex == 5) _uartrecvindex = 0;
+		if (_uartrecvindex > 15)
+		{
+			_uartrecvindex -= 5;
+			//接收数据完毕
+			setread(0);
+		}
+		
+}

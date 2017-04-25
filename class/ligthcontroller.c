@@ -2,16 +2,38 @@
 
 char lightvalue = 0;
 bit timeout = 1;
-bit lightsval[4];//灯状态映射
+char lightopen[4];
+char lightstate[4];//当前灯的状态
+char lvtono = 5;//在当前亮度可以开灯
+char lvtooff = 4;//在当前亮度可关灯
 
 void setlight(char para)
 {  	
-	 _LIGHT_1 = 0;
-	 _LIGHT_2 =	0;
-	 _LIGHT_3 =	0;
-	if(para>=1) _LIGHT_1 = 1;
-	if(para>=2) _LIGHT_2 = 1;
-	if(para>=3) _LIGHT_3 = 1;
+	 _LIGHT_1 = 1;
+	 _LIGHT_2 =	1;
+	 _LIGHT_3 =	1;
+		lightstate[0]=0;
+		lightstate[1]=0;
+		lightstate[2]=0;
+		lightstate[3]=0;
+	if(para > 0 && lightopen[0])
+		{
+			_LIGHT_1 = 0;
+			lightstate[0]=1;
+			para--;
+		}
+	if(para > 0 && lightopen[1])
+		{
+			_LIGHT_2 = 0;
+			lightstate[1]=1;
+			para--;
+		}
+	if(para > 0 && lightopen[2])
+		{
+			_LIGHT_3 = 0;
+			lightstate[2]=1;
+			para--;
+		}
 }
 void timectrl()
 {	
@@ -25,9 +47,14 @@ void lightctrl(char*para,unsigned char size)
 	lightvalue = 0;
 	for(index=0;index<size;index++)
 	{
-		if(para[index] > 5)
+		if(para[index] > lvtono)
 		{
+			lightopen[index]=1;
 			lightvalue++;
+		}
+		if(para[index] <= lvtooff)
+		{
+			lightopen[index] = 0;
 		}
 	}
 }
@@ -51,18 +78,6 @@ char timecmp(DATE* time1,DATE* time2)
 	}
 	return -1;
 }
-//void timeadd(DATE* sum,DATE* add1)
-//{
-//	sum->sec += add1->sec;
-//	sum->min += sum->sec / 60;
-//	sum->sec = sum->sec % 60;
-//	
-//	sum->min += add1->min;
-//	sum->hour +=  sum->min / 60;
-//	sum->min = sum->min % 60;
-//
-//	sum->hour += add1->hour;
-//}
 void timetoclose(DATE* curr,DATE* closetime,DATE* opentime)
 {
 	if(timecmp(closetime,opentime) > 0)

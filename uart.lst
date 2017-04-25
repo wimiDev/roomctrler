@@ -1,10 +1,10 @@
-C51 COMPILER V9.00   UART                                                                  04/12/2017 11:23:47 PAGE 1   
+C51 COMPILER V9.54   UART                                                                  04/25/2017 20:43:53 PAGE 1   
 
 
-C51 COMPILER V9.00, COMPILATION OF MODULE UART
+C51 COMPILER V9.54, COMPILATION OF MODULE UART
 OBJECT MODULE PLACED IN uart.obj
-COMPILER INVOKED BY: I:\program\keil\C51\BIN\C51.EXE class\uart.c LARGE BROWSE DEBUG OBJECTEXTEND PRINT(.\uart.lst) OBJE
-                    -CT(uart.obj)
+COMPILER INVOKED BY: J:\program\keil\C51\BIN\C51.EXE class\uart.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRIN
+                    -T(.\uart.lst) TABS(2) OBJECT(uart.obj)
 
 line level    source
 
@@ -13,7 +13,7 @@ line level    source
    3           unsigned char uartrecv[16];
    4           unsigned char _uartrecvindex = 0;
    5           char _readed = 1;
-   6          // CASHCALLBACK _cashcallback;
+   6           unsigned char _starttag[5] = {0x7F,0x0E,0x00,0xA0,0x00};
    7          
    8          void uartinit()
    9          {
@@ -30,7 +30,7 @@ line level    source
   20   1      //  ACC &= ~(S1_S0 | S1_S1);    //S1_S0=0 S1_S1=1
   21   1      //  ACC |= S1_S1;               //(P1.6/RxD_3, P1.7/TxD_3)
   22   1      //  P_SW1 = ACC;  
-  23   1      //      _cashcallback = &cashcard;
+  23   1      //  _cashcallback = &cashcard;
   24   1      #if (PARITYBIT == NONE_PARITY)
   25   1          SCON = 0x50;                //8位可变波特率
   26   1      #elif (PARITYBIT == ODD_PARITY) || (PARITYBIT == EVEN_PARITY) || (PARITYBIT == MARK_PARITY)
@@ -54,89 +54,105 @@ line level    source
   44   1          if (RI)
   45   1          {
   46   2              RI = 0;                 //清除RI位
-  47   2                      uartrecv[_uartrecvindex] = SBUF;
-  48   2                      setread(0);
-  49   2                      _uartrecvindex++;
-  50   2                      if (_uartrecvindex > 15)
-  51   2                      {
-  52   3                              _uartrecvindex = 0;
-  53   3                              //接收数据完毕
-  54   3      //                      _cashcallback(uartrecv);
-C51 COMPILER V9.00   UART                                                                  04/12/2017 11:23:47 PAGE 2   
+  47   2              _handlercash();
+  48   2          }
+  49   1          if (TI)
+  50   1          {
+  51   2              TI = 0;                 //清除TI位
+  52   2              busy = 0;               //清忙标志
+  53   2          }
+  54   1      }
+C51 COMPILER V9.54   UART                                                                  04/25/2017 20:43:53 PAGE 2   
 
-  55   3                      }
-  56   2          }
-  57   1          if (TI)
-  58   1          {
-  59   2              TI = 0;                 //清除TI位
-  60   2              busy = 0;               //清忙标志
-  61   2          }
-  62   1      }
-  63          /*----------------------------
-  64          发送串口数据
-  65          ----------------------------*/
-  66          void SendData(BYTE dat)
-  67          {
-  68   1          while (busy);               //等待前面的数据发送完成
-  69   1          ACC = dat;                  //获取校验位P (PSW.0)
-  70   1          if (P)                      //根据P来设置校验位
+  55          /*----------------------------
+  56          发送串口数据
+  57          ----------------------------*/
+  58          void SendData(BYTE dat)
+  59          {
+  60   1          while (busy);               //等待前面的数据发送完成
+  61   1          ACC = dat;                  //获取校验位P (PSW.0)
+  62   1          if (P)                      //根据P来设置校验位
+  63   1          {
+  64   2      #if (PARITYBIT == ODD_PARITY)
+                      TB8 = 0;                //设置校验位为0
+              #elif (PARITYBIT == EVEN_PARITY)
+                      TB8 = 1;                //设置校验位为1
+              #endif
+  69   2          }
+  70   1          else
   71   1          {
   72   2      #if (PARITYBIT == ODD_PARITY)
-                      TB8 = 0;                //设置校验位为0
-              #elif (PARITYBIT == EVEN_PARITY)
                       TB8 = 1;                //设置校验位为1
+              #elif (PARITYBIT == EVEN_PARITY)
+                      TB8 = 0;                //设置校验位为0
               #endif
   77   2          }
-  78   1          else
-  79   1          {
-  80   2      #if (PARITYBIT == ODD_PARITY)
-                      TB8 = 1;                //设置校验位为1
-              #elif (PARITYBIT == EVEN_PARITY)
-                      TB8 = 0;                //设置校验位为0
-              #endif
-  85   2          }
-  86   1          busy = 1;
-  87   1          SBUF = ACC;                 //写数据到UART数据寄存器
-  88   1      }
-  89          
-  90          /*----------------------------
-  91          发送字符串
-  92          ----------------------------*/
-  93          void SendString(char *s)
-  94          {       
-  95   1              unsigned char i=0;
-  96   1          while (*(s+i))                  //检测字符串结束标志
-  97   1          {
-  98   2              SendData(*(s+i));         //发送当前字符
-  99   2                      i++;
- 100   2          }
+  78   1          busy = 1;
+  79   1          SBUF = ACC;                 //写数据到UART数据寄存器
+  80   1      }
+  81          
+  82          /*----------------------------
+  83          发送字符串
+  84          ----------------------------*/
+  85          void SendString(char *s)
+  86          {   
+  87   1        unsigned char i=0;
+  88   1          while (*(s+i))                  //检测字符串结束标志
+  89   1          {
+  90   2              SendData(*(s+i));         //发送当前字符
+  91   2          i++;
+  92   2          }
+  93   1      }
+  94          unsigned char* getuartbuf()
+  95          {
+  96   1        return  uartrecv;
+  97   1      }
+  98          unsigned char getuartbuflen()
+  99          {
+ 100   1        return _uartrecvindex;
  101   1      }
- 102          unsigned char* getuartbuf()
+ 102          char getreaded()
  103          {
- 104   1              return  uartrecv;
+ 104   1        return _readed;
  105   1      }
- 106          unsigned char getuartbuflen()
+ 106          void setread(char read)
  107          {
- 108   1              return _uartrecvindex;
- 109   1      }
- 110          char getreaded()
- 111          {
- 112   1              return _readed;
- 113   1      }
- 114          void setread(char read)
- 115          {
- 116   1              if(read) _uartrecvindex = 0;
-C51 COMPILER V9.00   UART                                                                  04/12/2017 11:23:47 PAGE 3   
+ 108   1        if(read==1) _uartrecvindex = 0;
+ 109   1         _readed = read;
+ 110   1      }
+ 111          void _handlercash()
+ 112          {
+ 113   1          char _recvbuf = 0;
+ 114   1          if(getreaded() != 1) 
+ 115   1          {
+ 116   2            return;//数据尚未处理
+C51 COMPILER V9.54   UART                                                                  04/25/2017 20:43:53 PAGE 3   
 
- 117   1         _readed = read;
- 118   1      }
- 119          
+ 117   2          }
+ 118   1          _recvbuf = SBUF;
+ 119   1          if(_uartrecvindex < 5 && (_recvbuf != _starttag[_uartrecvindex]))
+ 120   1          {
+ 121   2            _uartrecvindex = 0;
+ 122   2            setread(-1);//非法数据
+ 123   2            return;
+ 124   2          }
+ 125   1          if(_uartrecvindex >= 5)uartrecv[_uartrecvindex - 5] = _recvbuf;
+ 126   1          _uartrecvindex++;
+ 127   1          //if(_uartrecvindex == 5) _uartrecvindex = 0;
+ 128   1          if (_uartrecvindex > 15)
+ 129   1          {
+ 130   2            _uartrecvindex -= 5;
+ 131   2            //接收数据完毕
+ 132   2            setread(0);
+ 133   2          }
+ 134   1          
+ 135   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    181    ----
+   CODE SIZE        =    239    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =     18       3
+   XDATA SIZE       =     23       3
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

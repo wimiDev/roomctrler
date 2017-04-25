@@ -1,10 +1,10 @@
-C51 COMPILER V9.00   LIGTHCONTROLLER                                                       04/12/2017 11:23:47 PAGE 1   
+C51 COMPILER V9.54   LIGTHCONTROLLER                                                       04/25/2017 20:43:55 PAGE 1   
 
 
-C51 COMPILER V9.00, COMPILATION OF MODULE LIGTHCONTROLLER
+C51 COMPILER V9.54, COMPILATION OF MODULE LIGTHCONTROLLER
 OBJECT MODULE PLACED IN ligthcontroller.obj
-COMPILER INVOKED BY: I:\program\keil\C51\BIN\C51.EXE class\ligthcontroller.c LARGE BROWSE DEBUG OBJECTEXTEND PRINT(.\lig
-                    -thcontroller.lst) OBJECT(ligthcontroller.obj)
+COMPILER INVOKED BY: J:\program\keil\C51\BIN\C51.EXE class\ligthcontroller.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECT
+                    -EXTEND PRINT(.\ligthcontroller.lst) TABS(2) OBJECT(ligthcontroller.obj)
 
 line level    source
 
@@ -12,122 +12,138 @@ line level    source
    2          
    3          char lightvalue = 0;
    4          bit timeout = 1;
-   5          
-   6          void setlight(char para)
-   7          {       
-   8   1               _LIGHT_1 = 0;
-   9   1               _LIGHT_2 =     0;
-  10   1               _LIGHT_3 =     0;
-  11   1              if(para>=1) _LIGHT_1 = 1;
-  12   1              if(para>=2) _LIGHT_2 = 1;
-  13   1              if(para>=3) _LIGHT_3 = 1;
-  14   1      }
-  15          void timectrl()
-  16          {       
-  17   1              timetoclose(&currenttime,&closetime,&opentime);
-  18   1              numberctrl(number);
-  19   1              setlight(lightvalue);           
-  20   1      }
-  21          void lightctrl(char*para,unsigned char size)
-  22          {
-  23   1              unsigned char index=0;
-  24   1              lightvalue = 0;
-  25   1              for(index=0;index<size;index++)
-  26   1              {
-  27   2                      if(para[index] > 5)
-  28   2                      {
-  29   3                              lightvalue++;
-  30   3                      }
-  31   2              }
-  32   1      }
-  33          char timecmp(DATE* time1,DATE* time2)
-  34          {
-*** WARNING C235 IN LINE 34 OF CLASS\LIGTHCONTROLLER.C: parameter 1: different types
-*** WARNING C235 IN LINE 34 OF CLASS\LIGTHCONTROLLER.C: parameter 2: different types
-  35   1              if(time1->hour > time2->hour) 
-  36   1              {
-  37   2                      return 1;
-  38   2              }
-  39   1      
-  40   1              if(time1->hour == time2->hour&&
-  41   1                 time1->min > time2->min )
-  42   1              {
-  43   2                      return 1;
-  44   2              }
-  45   1              if(time1->hour == time2->hour&&
-  46   1                 time1->min == time2->min&&
-  47   1                 time1->sec > time2->sec) 
-  48   1              {
-  49   2                      return 1;
-  50   2              }
-  51   1              return -1;
-  52   1      }
-C51 COMPILER V9.00   LIGTHCONTROLLER                                                       04/12/2017 11:23:47 PAGE 2   
+   5          char lightopen[4];
+   6          char lightstate[4];//当前灯的状态
+   7          char lvtono = 5;//在当前亮度可以开灯
+   8          char lvtooff = 4;//在当前亮度可关灯
+   9          
+  10          void setlight(char para)
+  11          {   
+  12   1         _LIGHT_1 = 1;
+  13   1         _LIGHT_2 = 1;
+  14   1         _LIGHT_3 = 1;
+  15   1          lightstate[0]=0;
+  16   1          lightstate[1]=0;
+  17   1          lightstate[2]=0;
+  18   1          lightstate[3]=0;
+  19   1        if(para > 0 && lightopen[0])
+  20   1          {
+  21   2            _LIGHT_1 = 0;
+  22   2            lightstate[0]=1;
+  23   2            para--;
+  24   2          }
+  25   1        if(para > 0 && lightopen[1])
+  26   1          {
+  27   2            _LIGHT_2 = 0;
+  28   2            lightstate[1]=1;
+  29   2            para--;
+  30   2          }
+  31   1        if(para > 0 && lightopen[2])
+  32   1          {
+  33   2            _LIGHT_3 = 0;
+  34   2            lightstate[2]=1;
+  35   2            para--;
+  36   2          }
+  37   1      }
+  38          void timectrl()
+  39          { 
+  40   1        timetoclose(&currenttime,&closetime,&opentime);
+  41   1        numberctrl(number);
+  42   1        setlight(lightvalue);   
+  43   1      }
+  44          void lightctrl(char*para,unsigned char size)
+  45          {
+  46   1        unsigned char index=0;
+  47   1        lightvalue = 0;
+  48   1        for(index=0;index<size;index++)
+  49   1        {
+  50   2          if(para[index] > lvtono)
+  51   2          {
+  52   3            lightopen[index]=1;
+  53   3            lightvalue++;
+  54   3          }
+C51 COMPILER V9.54   LIGTHCONTROLLER                                                       04/25/2017 20:43:55 PAGE 2   
 
-  53          //void timeadd(DATE* sum,DATE* add1)
-  54          //{
-  55          //      sum->sec += add1->sec;
-  56          //      sum->min += sum->sec / 60;
-  57          //      sum->sec = sum->sec % 60;
-  58          //      
-  59          //      sum->min += add1->min;
-  60          //      sum->hour +=  sum->min / 60;
-  61          //      sum->min = sum->min % 60;
-  62          //
-  63          //      sum->hour += add1->hour;
-  64          //}
-  65          void timetoclose(DATE* curr,DATE* closetime,DATE* opentime)
-  66          {
-*** WARNING C235 IN LINE 66 OF CLASS\LIGTHCONTROLLER.C: parameter 1: different types
-*** WARNING C235 IN LINE 66 OF CLASS\LIGTHCONTROLLER.C: parameter 2: different types
-*** WARNING C235 IN LINE 66 OF CLASS\LIGTHCONTROLLER.C: parameter 3: different types
-  67   1              if(timecmp(closetime,opentime) > 0)
-  68   1              {
-  69   2                      if(timecmp(curr,opentime) >0&&
-  70   2                      timecmp(curr,closetime) <0 )
-  71   2                      {
-  72   3                              timeout = 0;
-  73   3                              return;         
-  74   3                      }
-  75   2                      timeout=1;
-  76   2                      lightvalue=0;           
-  77   2              }
-  78   1              else
-  79   1              {
-  80   2                      if(timecmp(curr,opentime) < 0 && 
-  81   2                              timecmp(curr,closetime) > 0)
-  82   2                      {
-  83   3                              //未到开灯时间
-  84   3                              timeout=1;
-  85   3                              lightvalue=0;
-  86   3                              return;
-  87   3                      }
-  88   2                      timeout = 0;    
-  89   2              }               
-  90   1      }
-  91          
-  92          void numberctrl(unsigned char num)
-  93          {
-  94   1               if(timeout)return;
-  95   1               if(num <= lightvalue)
-  96   1               {
-  97   2                      lightvalue = num;
-  98   2               }
-  99   1      }
- 100          
+  55   2          if(para[index] <= lvtooff)
+  56   2          {
+  57   3            lightopen[index] = 0;
+  58   3          }
+  59   2        }
+  60   1      }
+  61          char timecmp(DATE* time1,DATE* time2)
+  62          {
+*** WARNING C235 IN LINE 62 OF class\ligthcontroller.c: parameter 1: different types
+*** WARNING C235 IN LINE 62 OF class\ligthcontroller.c: parameter 2: different types
+  63   1        if(time1->hour > time2->hour) 
+  64   1        {
+  65   2          return 1;
+  66   2        }
+  67   1      
+  68   1        if(time1->hour == time2->hour&&
+  69   1           time1->min > time2->min )
+  70   1        {
+  71   2          return 1;
+  72   2        }
+  73   1        if(time1->hour == time2->hour&&
+  74   1           time1->min == time2->min&&
+  75   1           time1->sec > time2->sec) 
+  76   1        {
+  77   2          return 1;
+  78   2        }
+  79   1        return -1;
+  80   1      }
+  81          void timetoclose(DATE* curr,DATE* closetime,DATE* opentime)
+  82          {
+*** WARNING C235 IN LINE 82 OF class\ligthcontroller.c: parameter 1: different types
+*** WARNING C235 IN LINE 82 OF class\ligthcontroller.c: parameter 2: different types
+*** WARNING C235 IN LINE 82 OF class\ligthcontroller.c: parameter 3: different types
+  83   1        if(timecmp(closetime,opentime) > 0)
+  84   1        {
+  85   2          if(timecmp(curr,opentime) >0&&
+  86   2          timecmp(curr,closetime) <0 )
+  87   2          {
+  88   3            timeout = 0;
+  89   3            return;   
+  90   3          }
+  91   2          timeout=1;
+  92   2          lightvalue=0;   
+  93   2        }
+  94   1        else
+  95   1        {
+  96   2          if(timecmp(curr,opentime) < 0 && 
+  97   2            timecmp(curr,closetime) > 0)
+  98   2          {
+  99   3            //未到开灯时间
+ 100   3            timeout=1;
+ 101   3            lightvalue=0;
+ 102   3            return;
+ 103   3          }
+ 104   2          timeout = 0;  
+ 105   2        }   
+ 106   1      }
+ 107          
+ 108          void numberctrl(unsigned char num)
+ 109          {
+ 110   1         if(timeout)return;
+ 111   1         if(num <= lightvalue)
+C51 COMPILER V9.54   LIGTHCONTROLLER                                                       04/25/2017 20:43:55 PAGE 3   
+
+ 112   1         {
+ 113   2          lightvalue = num;
+ 114   2         }
+ 115   1      }
+ 116          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    536    ----
+   CODE SIZE        =    650    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =      1      18
+   XDATA SIZE       =     11      18
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
    BIT SIZE         =      1    ----
 END OF MODULE INFORMATION.
-
-C51 COMPILER V9.00   LIGTHCONTROLLER                                                       04/12/2017 11:23:47 PAGE 3   
 
 
 C51 COMPILATION COMPLETE.  5 WARNING(S),  0 ERROR(S)

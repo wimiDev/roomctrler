@@ -11,8 +11,9 @@ char setclosetime(DATE* closetime)
 	{
 		if (key==3)	 
 		{
-		lvsecond=1;
-		key=-1;
+			beebee(1);
+			lvsecond=1;
+			key=-1;
 		};
 	}
 	if(lvsecond==1)
@@ -20,11 +21,12 @@ char setclosetime(DATE* closetime)
 		LCDcls(); 	
 		val = inputbox();
 		sprintf(str,"inputhour:=%d",(int)val);
-		LCDprintf(str);
+		LCDprintf(str,0);
 		if(key==3) {
-		lvsecond=2;
-		closetime->hour = val;
-		key=-1;
+			`beebee(1);
+			lvsecond=2;
+			closetime->hour = val;
+			key=-1;
 		};	
 	} 
 	if(lvsecond==2)
@@ -32,11 +34,12 @@ char setclosetime(DATE* closetime)
 		LCDcls(); 	
 		val = inputbox();
 		sprintf(str,"inputmin:=%d",(int)val);
-		LCDprintf(str);
+		LCDprintf(str,0);
 		if(key==3) {
-		lvsecond=3;
-		closetime->min = val;
-		key=-1;
+			beebee(1);
+			lvsecond=3;
+			closetime->min = val;
+			key=-1;
 		};	
 	} 
 	if(lvsecond==3)
@@ -44,11 +47,14 @@ char setclosetime(DATE* closetime)
 		LCDcls(); 	
 		val = inputbox();
 		sprintf(str,"inputsec:=%d",(int)val);
-		LCDprintf(str);
+		LCDprintf(str,0);
 		if(key==3) {
+		beebee(1);
 		lvsecond=0;
 		closetime->sec = val;
 		key=-1;
+		LCDcls(); 
+		LCDprintf("----------Waiting",0);
 		return 0;
 		};	
 	} 
@@ -82,4 +88,46 @@ char inputbox()
 		inputval = (inputval-inputval%10)/10;		
 	}  	
 	return inputval;
+}
+void setbeeanle()
+{
+		char str[30];
+	//获取输入的键值
+		char key = getkey(0);
+		if (key == 3 && lvsecond == 0)	 
+		{
+			lvsecond = 4;
+			LCDcls(); 
+			key = -1;
+		}
+		if(lvsecond == 4)
+		{
+				if(key==15)
+				{
+				//上翻页
+					enablebee = ~enablebee;
+				}
+				if(key==11)
+				{
+				//下翻页
+					enablebee = ~enablebee;
+				}
+				if(enablebee)
+				{
+					sprintf(str,"SET--BEE----ON----");
+					LCDprintf(str,0);
+				}
+				else
+				{
+					sprintf(str,"SET--BEE----OFF---");
+					LCDprintf(str,0);
+				}
+				if (key == 3)
+				{
+					lvsecond=0;
+					key = -1;
+					beebee(3);
+				}
+				
+		}
 }

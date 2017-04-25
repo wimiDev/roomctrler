@@ -1,10 +1,10 @@
-C51 COMPILER V9.00   KEYCTRL                                                               04/12/2017 11:23:47 PAGE 1   
+C51 COMPILER V9.54   KEYCTRL                                                               04/25/2017 20:43:54 PAGE 1   
 
 
-C51 COMPILER V9.00, COMPILATION OF MODULE KEYCTRL
+C51 COMPILER V9.54, COMPILATION OF MODULE KEYCTRL
 OBJECT MODULE PLACED IN keyctrl.obj
-COMPILER INVOKED BY: I:\program\keil\C51\BIN\C51.EXE class\keyctrl.c LARGE BROWSE DEBUG OBJECTEXTEND PRINT(.\keyctrl.lst
-                    -) OBJECT(keyctrl.obj)
+COMPILER INVOKED BY: J:\program\keil\C51\BIN\C51.EXE class\keyctrl.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND P
+                    -RINT(.\keyctrl.lst) TABS(2) OBJECT(keyctrl.obj)
 
 line level    source
 
@@ -12,87 +12,87 @@ line level    source
    2          
    3           unsigned char getkeyval()
    4           {
-   5   1              unsigned char keyval = 0;
-   6   1              unsigned char value = 0;
-   7   1              value = K0;
-   8   1              value<<=7;
-   9   1              keyval|=value;
-  10   1              value = 0;
-  11   1               
-  12   1              value = K1;
-  13   1              value<<=6;
-  14   1              keyval |=value; 
-  15   1              value = 0;
+   5   1        unsigned char keyval = 0;
+   6   1        unsigned char value = 0;
+   7   1        value = K0;
+   8   1        value<<=7;
+   9   1        keyval|=value;
+  10   1        value = 0;
+  11   1         
+  12   1        value = K1;
+  13   1        value<<=6;
+  14   1        keyval |=value; 
+  15   1        value = 0;
   16   1      
-  17   1              value = K2;
-  18   1              value<<=5;
-  19   1              keyval |=value;
-  20   1              value = 0;
+  17   1        value = K2;
+  18   1        value<<=5;
+  19   1        keyval |=value;
+  20   1        value = 0;
   21   1      
-  22   1              value = K3;
-  23   1              value<<=4;
-  24   1              keyval |=value;
-  25   1              value = 0;
+  22   1        value = K3;
+  23   1        value<<=4;
+  24   1        keyval |=value;
+  25   1        value = 0;
   26   1      
-  27   1              value = K4;
-  28   1              value<<=3;
-  29   1              keyval |=value;
-  30   1              value = 0;
+  27   1        value = K4;
+  28   1        value<<=3;
+  29   1        keyval |=value;
+  30   1        value = 0;
   31   1      
-  32   1              value = K5;
-  33   1              value<<=2;
-  34   1              keyval |=value;
-  35   1              value = 0;
+  32   1        value = K5;
+  33   1        value<<=2;
+  34   1        keyval |=value;
+  35   1        value = 0;
   36   1      
-  37   1              value = K6;
-  38   1              value<<=1;
-  39   1              keyval |=value;
-  40   1              value = 0;
+  37   1        value = K6;
+  38   1        value<<=1;
+  39   1        keyval |=value;
+  40   1        value = 0;
   41   1      
-  42   1              value = K7;
-  43   1              value<<=0;
-  44   1              keyval |=value; 
-  45   1              value = 0;
+  42   1        value = K7;
+  43   1        value<<=0;
+  44   1        keyval |=value; 
+  45   1        value = 0;
   46   1      
-  47   1              return  keyval;
+  47   1          return  keyval;
   48   1       }
   49          char getkeypree()
   50          {
-  51   1              char keypree = -1;
-  52   1              unsigned char cowval = 0;
-  53   1              unsigned char rowval = 0;
-  54   1              unsigned char cow = 0;//被按下的列
-C51 COMPILER V9.00   KEYCTRL                                                               04/12/2017 11:23:47 PAGE 2   
+  51   1        char keypree = -1;
+  52   1        unsigned char cowval = 0;
+  53   1        unsigned char rowval = 0;
+  54   1        unsigned char cow = 0;//被按下的列
+C51 COMPILER V9.54   KEYCTRL                                                               04/25/2017 20:43:54 PAGE 2   
 
-  55   1              unsigned char row = 0;//被按下的行
-  56   1              unsigned char scanrule1[] =
-  57   1              {0x70,0xb0,0xd0,0xe0};
-  58   1              unsigned char scanrule2[] =
-  59   1              {0x07,0x0b,0x0d,0x0e};
+  55   1        unsigned char row = 0;//被按下的行
+  56   1        unsigned char scanrule1[] =
+  57   1        {0x70,0xb0,0xd0,0xe0};
+  58   1        unsigned char scanrule2[] =
+  59   1        {0x07,0x0b,0x0d,0x0e};
   60   1      
-  61   1              K0=1;K1=1;K2=1;K3=1;
-  62   1              K4=0;K5=0;K6=0;K7=0;
-  63   1              //读取那一列被按下
-  64   1              cowval = getkeyval();
-  65   1              if (cowval == 0xf0) return -1;
-  66   1              K0=0;K1=0;K2=0;K3=0;
-  67   1              K4=1;K5=1;K6=1;K7=1;
-  68   1              //读取哪一行被按下
-  69   1              rowval = getkeyval();
-  70   1              if (rowval != 0x0f)
-  71   1              {
-  72   2                      for(cow = 0;cow<4;cow++)
-  73   2                      {
-  74   3                         if(cowval == scanrule1[cow])break;
-  75   3                      }
-  76   2                      for(row = 0;row<4;row++)
-  77   2                      {
-  78   3                              if(rowval == scanrule2[row])break;
-  79   3                      } 
-  80   2                      keypree = row * 4 + cow;
-  81   2                      return keypree;
-  82   2              }       
-  83   1              return -1;
+  61   1        K0=1;K1=1;K2=1;K3=1;
+  62   1        K4=0;K5=0;K6=0;K7=0;
+  63   1        //读取那一列被按下
+  64   1        cowval = getkeyval();
+  65   1        if (cowval == 0xf0) return -1;
+  66   1          K0=0;K1=0;K2=0;K3=0;
+  67   1        K4=1;K5=1;K6=1;K7=1;
+  68   1        //读取哪一行被按下
+  69   1        rowval = getkeyval();
+  70   1        if (rowval != 0x0f)
+  71   1        {
+  72   2          for(cow = 0;cow<4;cow++)
+  73   2          {
+  74   3             if(cowval == scanrule1[cow])break;
+  75   3          }
+  76   2          for(row = 0;row<4;row++)
+  77   2          {
+  78   3            if(rowval == scanrule2[row])break;
+  79   3          } 
+  80   2          keypree = row * 4 + cow;
+  81   2          return keypree;
+  82   2        }   
+  83   1        return -1;
   84   1      }
 
 
