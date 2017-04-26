@@ -498,6 +498,16 @@
               <FileType>5</FileType>
               <FilePath>.\class\ligthcontroller.h</FilePath>
             </File>
+            <File>
+              <FileName>view.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\class\view.c</FilePath>
+            </File>
+            <File>
+              <FileName>view.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\class\view.h</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

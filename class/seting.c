@@ -23,7 +23,7 @@ char setclosetime(DATE* closetime)
 		sprintf(str,"inputhour:=%d",(int)val);
 		LCDprintf(str,0);
 		if(key==3) {
-			`beebee(1);
+			beebee(1);
 			lvsecond=2;
 			closetime->hour = val;
 			key=-1;

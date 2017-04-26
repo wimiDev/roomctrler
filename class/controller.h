@@ -1,10 +1,9 @@
 #ifndef __CONTROLLER_H_
 #define __CONTROLLER_H_
-#define MAXPAGE 7
 
-#include"global.h"
 
-sbit _BEEBEE = P2^6;//beebee
+#include "global.h"
+
 
 typedef struct _DATE
 {
@@ -18,24 +17,11 @@ typedef struct _DATE
 extern DATE currenttime;//当前时间
 extern DATE closetime;//关灯时间
 extern DATE opentime;//关灯时间
-extern unsigned char _page;//显示的页,一级菜单
-extern unsigned char lvsecond;//二级菜单，0表示未在二级菜单
 extern unsigned char paralist[4]; 
 extern unsigned char number;
-extern char trybee;
-extern bit enablebee;
 extern void controllerinit();
-//extern void setparas(char*list);
 extern void parafilter(unsigned char* list,char size);
 extern void getcutrrenttime();
-extern void showtimeval(DATE* time,char*name);
-extern void uiupdater();
 extern void cashcard(unsigned char *resdata);
-extern void trunpage();
-extern void beebee(char inval);
-extern void beehandler();
-extern void showbeeable();
-extern void showlightsta();
-
 
 #endif

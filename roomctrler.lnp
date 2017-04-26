@@ -10,6 +10,7 @@
 "keyhandler.obj",
 "iddatabase.obj",
 "seting.obj",
-"ligthcontroller.obj" 
+"ligthcontroller.obj",
+"view.obj" 
 TO "roomctrler" 
 RAMSIZE(256) 
