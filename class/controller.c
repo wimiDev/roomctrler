@@ -9,9 +9,9 @@ void controllerinit()
 {	 
 	_BEEBEE = 0;
 	Initial_DS1302();
-	DS1302_SetTime(DS1302_HOUR,10);	//??????????10??54??30
-	DS1302_SetTime(DS1302_MINUTE,54);
-	DS1302_SetTime(DS1302_SECOND,30); 
+//	DS1302_SetTime(DS1302_HOUR,10);	//??????????10??54??30
+//	DS1302_SetTime(DS1302_MINUTE,54);
+//	DS1302_SetTime(DS1302_SECOND,30); 
 	dbinit();
   LCD_init();  //初始化LCD模块 
 	LCDcls(); //清屏幕	

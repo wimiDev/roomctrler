@@ -13,19 +13,20 @@ void main()
    C51Timer0Init();
    controllerinit();
    SendString("init\r\n");
-   while(1)
-    {
-		schdulerswitch();
-	}
+   while(1) schdulerswitch();
 }
 void schdulerswitch()
 {
 	 update();
 	 if(osclock%1000 ==0 )sch1s();
 
+	 if(osclock%50 == 0)sch005s();
+	
 	 if(osclock%100 == 0)sch01s();
-
+	
 	 if(osclock%300==0) sch03s();
+	
+	 if(osclock%500 == 0) sch05s();
 }
 void C51Timer0Init()
 {  	

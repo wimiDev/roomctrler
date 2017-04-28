@@ -10,18 +10,25 @@ void update()
 
 void sch1s()
 {
-	uiupdater();
 	getcutrrenttime();
-	lightctrl(paralist,3);
+	lightctrl(paralist,3,number);
 	timectrl();//根据时间关灯
 	
 } 
+void sch005s()
+{
+	
+	keyhandler();
+}
 void sch01s()
 {	
-	cashcard(getuartbuf());
-	keyhandler();
+		cashcard(getuartbuf());
 }
 void sch03s()
 {
 	beehandler();
+}
+void sch05s()
+{
+	uiupdater();
 }

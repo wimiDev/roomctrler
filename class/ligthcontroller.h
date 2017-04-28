@@ -19,7 +19,7 @@ extern void timectrl();
 extern void timetoclose(void* curr,void* closetime,void* opentime);
 extern void numberctrl(unsigned char num);//根据人数开关灯
 extern char timecmp(void* time1,void* time2);
-extern void lightctrl(char*para,unsigned char size);
+extern void lightctrl(char*para,unsigned char size,unsigned char num);
 
 
 #endif

@@ -38,14 +38,15 @@ void setlight(char para)
 void timectrl()
 {	
 	timetoclose(&currenttime,&closetime,&opentime);
-	numberctrl(number);
+	//numberctrl(number);
 	setlight(lightvalue);		
 }
-void lightctrl(char*para,unsigned char size)
+void lightctrl(char*para,unsigned char _size,unsigned char number)
 {
-	unsigned char index=0;
+	unsigned char index = 0;
+	unsigned char lightpoint = 0;//有几个点亮度是足够的。
 	lightvalue = 0;
-	for(index=0;index<size;index++)
+	for(index=0;index<_size;index++)
 	{
 		if(para[index] > lvtono)
 		{
@@ -56,6 +57,15 @@ void lightctrl(char*para,unsigned char size)
 		{
 			lightopen[index] = 0;
 		}
+	}
+	lightpoint = _size - lightvalue;
+	if(number > lightpoint) 
+	{
+		lightvalue = number - lightpoint;
+	}
+	else
+	{
+		lightvalue = 0;
 	}
 }
 char timecmp(DATE* time1,DATE* time2)

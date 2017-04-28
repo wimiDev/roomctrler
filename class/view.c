@@ -46,9 +46,10 @@ void uiupdater()
 	}
 	else if (_page==1)
 	{
-		sprintf(sendstr,"a%d,b%d,c%d,d%d",(int)paralist[0],
+		LCDprintf("-LIGS VAL-",0);
+		sprintf(sendstr,"a:%d--b:%d--c:%d--d:%d",(int)paralist[0],
 			   (int)paralist[1],(int)paralist[2],(int)paralist[3]);
-		LCDprintf(sendstr,0);	
+		LCDprintf(sendstr,-1);	
 	}
 	else if (_page==2)
 	{
@@ -113,7 +114,7 @@ void showlightsta()
 {
 		char str[30];
 		char index=0;
-		sprintf(str,"---LIGHT--");
+		sprintf(str,"---LAMPS--");
 		LCDprintf(str,0);
 		for(index=0;index<3;index++)
 		{
