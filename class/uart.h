@@ -6,7 +6,7 @@
 typedef unsigned char BYTE;
 typedef unsigned int WORD;
 
-#define FOSC 11059200L          //系统频率
+#define FOSC 27000000L//11059200L          //系统频率
 #define BAUD 9600//115200             //串口波特率
 
 #define NONE_PARITY     0       //无校验

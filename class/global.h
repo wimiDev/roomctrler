@@ -17,7 +17,7 @@
 #include "ligthcontroller.h"
 #include "controller.h"
 #include "view.h"
-extern unsigned int osclock;
+extern long int osclock;
 
 //#define unchar unsigned char
 //#define unint unsigned int

@@ -10,7 +10,7 @@ extern char lightvalue;//开几盏灯
 extern char lightopen[4];//亮度不足为1
 extern char lightstate[4];//当前灯的状态
 extern bit timeout; 
-extern char lvtono;
+extern char lvtoopen;
 extern char lvtooff;
 
 extern void setlight(char para);//设置开几盏灯++

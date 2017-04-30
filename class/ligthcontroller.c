@@ -4,8 +4,8 @@ char lightvalue = 0;
 bit timeout = 1;
 char lightopen[4];
 char lightstate[4];//当前灯的状态
-char lvtono = 5;//在当前亮度可以开灯
-char lvtooff = 4;//在当前亮度可关灯
+char lvtoopen = 5;//在当前亮度可以开灯
+char lvtooff = 0;//在当前亮度可关灯
 
 void setlight(char para)
 {  	
@@ -44,17 +44,25 @@ void timectrl()
 void lightctrl(char*para,unsigned char _size,unsigned char number)
 {
 	unsigned char index = 0;
-	unsigned char lightpoint = 0;//有几个点亮度是足够的。
-	lightvalue = 0;
+	unsigned char lightpoint = 0;//有几个点亮度是足够的
+//	char str[30];
+	lightvalue = 0;//需要点亮多少个灯
+	
 	for(index=0;index<_size;index++)
 	{
-		if(para[index] > lvtono)
+		if(lightstate[index]) 
+		{
+			lightvalue= ++lightvalue % 4;
+		}else if(para[index] > lvtoopen)
 		{
 			lightopen[index]=1;
-			lightvalue++;
+			lightvalue= ++lightvalue % 4;
 		}
-		if(para[index] <= lvtooff)
+		
+		if(para[index] <= lvtooff )
 		{
+//			sprintf(str,"CLOSE ID: %d",(int)index);
+//			LCDprintf(str,0);
 			lightopen[index] = 0;
 		}
 	}
@@ -62,7 +70,7 @@ void lightctrl(char*para,unsigned char _size,unsigned char number)
 	if(number > lightpoint) 
 	{
 		lightvalue = number - lightpoint;
-	}
+	}         
 	else
 	{
 		lightvalue = 0;

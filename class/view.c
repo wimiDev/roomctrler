@@ -15,6 +15,7 @@ void showtimeval(DATE* time,char*name)
 }
 void trunpage()
 {
+	char key = -1;
 	if(lvsecond == 0)
 	{
 		if(getkey(0)==15)
@@ -25,13 +26,20 @@ void trunpage()
 			beebee(1);
 			LCDcls();
 		}
-		if(getkey(0)==11)
+		else if(getkey(0)==11)
 		{
 		//ÏÂ·­Ò³
 			--_page;
 			if (_page>MAXPAGE-1)	_page = MAXPAGE-1;
 			beebee(1);
 			LCDcls();
+		}
+		else
+		{
+//			LCDcls();
+//			key = getkey(0);
+//			if(key >= 0)
+//			_page = getnumber(key) % MAXPAGE;
 		}
 	}
 }
@@ -74,6 +82,11 @@ void uiupdater()
 	else if(_page == 6)
 	{
 		showlightsta();
+	}
+	else if(_page == 7)
+	{
+
+		setlvoff_on();
 	}
 
 	getkey(1);

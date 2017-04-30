@@ -7,4 +7,5 @@ extern void setopentime(void*);
 extern void setcurrenttime();
 extern char inputbox();
 extern void setbeeanle();
+extern void setlvoff_on();
 #endif

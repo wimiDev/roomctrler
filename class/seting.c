@@ -16,7 +16,7 @@ char setclosetime(DATE* closetime)
 			key=-1;
 		};
 	}
-	if(lvsecond==1)
+	if(lvsecond == 1 )
 	{
 		LCDcls(); 	
 		val = inputbox();
@@ -29,7 +29,7 @@ char setclosetime(DATE* closetime)
 			key=-1;
 		};	
 	} 
-	if(lvsecond==2)
+	if(lvsecond== 2 )
 	{
 		LCDcls(); 	
 		val = inputbox();
@@ -42,7 +42,7 @@ char setclosetime(DATE* closetime)
 			key=-1;
 		};	
 	} 
-	if(lvsecond==3)
+	if(lvsecond== 3 )
 	{
 		LCDcls(); 	
 		val = inputbox();
@@ -85,7 +85,7 @@ char inputbox()
 	if(key==14)
 	{
 		//退格
-		inputval = (inputval-inputval%10)/10;		
+		inputval = (inputval-inputval%10) / 10;		
 	}  	
 	return inputval;
 }
@@ -128,6 +128,64 @@ void setbeeanle()
 					key = -1;
 					beebee(3);
 				}
-				
+		}
+}
+void setlvoff_on()
+{
+		char str[30];
+	  char val = -1;
+		char setp1 = 0;
+		char setp2 = 10;
+	//获取输入的键值
+		char key = getkey(0);
+		if (key == 3 && lvsecond == 0)	 
+		{
+			lvsecond = 5;
+			LCDcls(); 
+			key = -1;
+		}
+		else
+		{
+			sprintf(str,"LVCLOSE:%d-LVOPEN:%d",(int)lvtooff,(int)lvtoopen);
+			LCDprintf(str,0);
+		}
+		if(lvsecond == 5 )
+		{
+			LCDcls();
+			val = inputbox();
+			sprintf(str,"LV-CLOSE--%d-TO-%d---:=%d",(int)setp1,(int)setp2,(int)val);
+			LCDprintf(str,0);
+			if(val > 10)val = val%10;
+			if(val < 0)val = 0;
+			if(key==3)
+			{
+				lvsecond = 6;
+				key=-1;
+				lvtooff = val;
+			}
+		}
+		if(lvsecond == 6 )
+		{
+			if(lvtooff >= 10)
+			{
+				lvsecond = 0;
+				key=-1;
+				lvtoopen = 0;
+				return;
+			}
+			LCDcls();
+			val = inputbox();
+			setp1 = lvtooff + 1;
+			sprintf(str,"LV-OPEN--%d-TO-%d---:=%d",(int)setp1,(int)setp2,(int)val);
+			LCDprintf(str,0);
+			if(val > 10)val = val%10;
+			if(val < 0)val = setp1;
+			if(key==3 )
+			{
+				LCDcls();
+				lvsecond = 0;
+				key=-1;
+				lvtoopen = val;
+			}
 		}
 }

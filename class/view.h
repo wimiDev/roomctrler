@@ -1,7 +1,7 @@
 #ifndef __VIEW_H_
 #define __VIEW_H_
 
-#define MAXPAGE 7
+#define MAXPAGE 8
 
 #include "global.h"
 
