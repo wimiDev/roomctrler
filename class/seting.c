@@ -11,7 +11,7 @@ char setclosetime(DATE* closetime)
 	{
 		if (key==3)	 
 		{
-			beebee(1);
+			//beebee(1);
 			lvsecond=1;
 			key=-1;
 		};
@@ -23,7 +23,7 @@ char setclosetime(DATE* closetime)
 		sprintf(str,"inputhour:=%d",(int)val);
 		LCDprintf(str,0);
 		if(key==3) {
-			beebee(1);
+			//beebee(1);
 			lvsecond=2;
 			closetime->hour = val;
 			key=-1;
@@ -36,7 +36,7 @@ char setclosetime(DATE* closetime)
 		sprintf(str,"inputmin:=%d",(int)val);
 		LCDprintf(str,0);
 		if(key==3) {
-			beebee(1);
+			//beebee(1);
 			lvsecond=3;
 			closetime->min = val;
 			key=-1;
@@ -49,7 +49,7 @@ char setclosetime(DATE* closetime)
 		sprintf(str,"inputsec:=%d",(int)val);
 		LCDprintf(str,0);
 		if(key==3) {
-		beebee(1);
+		//beebee(1);
 		lvsecond=0;
 		closetime->sec = val;
 		key=-1;

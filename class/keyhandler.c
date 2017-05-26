@@ -4,41 +4,21 @@
 void keyhandler()
 {
 	char keyval = 0 ;
-	//char str[11];
 	keyval = getkeypree();
+	if((keyval !=-1) &&(keyval != _keyval))
+	{
+		beebee(2);
+	}
 	if(keyval != -1) 
 	{
 		_keyval = keyval;
 		return;
 	}	
-	if(_keyval!=-1)	_keyvalbuf = _keyval;
-//	switch(_keyval)
-//	{
-//		case 15:
-//		{
-//			//上翻页
-//			_page++;
-//			if (_page > MAXPAGE) _page = 0;
-//		}break;
-//		case 11:
-//		{
-//			//下翻页
-//			--_page;
-//			if (_page>MAXPAGE-1)	_page = MAXPAGE-1;
-//		}break;
-//		case 7:
-//		{
-//			//取消
-//		}break;
-//		case 3:
-//		{
-//		  //确定
-//		}break;
-//		default:{
-//		   _page = _keyval >= 0?_keyval:_page;
-//
-//		}break;
-//	}
+	if(_keyval!=-1)	
+	{
+		//按键弹起
+		_keyvalbuf = _keyval;
+	}
 	_keyval=-1;
 }
 char getkey(bit _swallow)

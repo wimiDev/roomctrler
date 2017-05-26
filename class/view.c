@@ -23,7 +23,7 @@ void trunpage()
 		//ÉÏ·­Ò³
 			_page++;
 			if (_page >= MAXPAGE) _page = 0;
-			beebee(1);
+			//beebee(1);
 			LCDcls();
 		}
 		else if(getkey(0)==11)
@@ -31,15 +31,14 @@ void trunpage()
 		//ÏÂ·­Ò³
 			--_page;
 			if (_page>MAXPAGE-1)	_page = MAXPAGE-1;
-			beebee(1);
+			//beebee(1);
 			LCDcls();
 		}
-		else
+		else if(getkey(0)!=3)
 		{
-//			LCDcls();
-//			key = getkey(0);
-//			if(key >= 0)
-//			_page = getnumber(key) % MAXPAGE;
+			LCDcls();
+			key = getnumber(getkey(0));
+			if(key >= 0 && key < MAXPAGE)_page = key;
 		}
 	}
 }
@@ -50,12 +49,12 @@ void uiupdater()
 	trunpage();
 	if (_page == 0)
 	{ 
-		LCDprintf("--wellcom-----use----WIMI-DEV-",0);	
+		LCDprintf("-Lighting- control----System",0);	
 	}
 	else if (_page==1)
 	{
 		LCDprintf("-LIGS VAL-",0);
-		sprintf(sendstr,"a:%d--b:%d--c:%d--d:%d",(int)paralist[0],
+		sprintf(sendstr,"a:%d-b:%d-c:%d-d:%d",(int)paralist[0],
 			   (int)paralist[1],(int)paralist[2],(int)paralist[3]);
 		LCDprintf(sendstr,-1);	
 	}
@@ -147,7 +146,7 @@ void showmsg(char str[],char inval)
 {
 	char msg[30];
 	msginval = inval;
-	sprintf(msg,"%s------%d",str,(int)msginval);
+	sprintf(msg,"%s",str);
 	LCDprintf(msg,0);
 }
 char msgviewhandler()

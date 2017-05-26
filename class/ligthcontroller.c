@@ -41,40 +41,42 @@ void timectrl()
 	//numberctrl(number);
 	setlight(lightvalue);		
 }
+
+/*
+*BUG01:由于数据更新速率的问题，可能会带来采集点亮度数据不是实时
+*同步的问题，会引发全部灯光熄灭再恢复正常。暂时解决办法是增加灯
+*光处理方法的刷新时间间隔，确保数据能全部同步。
+*/
+
 void lightctrl(char*para,unsigned char _size,unsigned char number)
 {
 	unsigned char index = 0;
 	unsigned char lightpoint = 0;//有几个点亮度是足够的
-//	char str[30];
 	lightvalue = 0;//需要点亮多少个灯
-	
-	for(index=0;index<_size;index++)
+	for(index = 0;index < _size;index++)
 	{
+		//如果这盏灯已经开了，就默认这个点的亮度是足够的
 		if(lightstate[index]) 
 		{
-			lightvalue= ++lightvalue % 4;
-		}else if(para[index] > lvtoopen)
-		{
-			lightopen[index]=1;
-			lightvalue= ++lightvalue % 4;
+			lightvalue = ++lightvalue % 4;
 		}
-		
+		//如果这个采集点的亮度不足标记这盏灯可以开
+		else if(para[index] > lvtoopen)
+		{
+			lightopen[index] = 1;
+			lightvalue = ++ lightvalue % 4;
+		}
+		//如果这个采集点的亮度过高标记这盏灯可以关
 		if(para[index] <= lvtooff )
 		{
-//			sprintf(str,"CLOSE ID: %d",(int)index);
-//			LCDprintf(str,0);
 			lightopen[index] = 0;
 		}
 	}
+	//计算有几个需要开的灯
 	lightpoint = _size - lightvalue;
-	if(number > lightpoint) 
-	{
-		lightvalue = number - lightpoint;
-	}         
-	else
-	{
-		lightvalue = 0;
-	}
+	//根据现在有多少人来计算需要开多少盏灯
+	lightvalue = number - lightpoint;
+	if(lightvalue < 0) lightvalue = 0;
 }
 char timecmp(DATE* time1,DATE* time2)
 {
@@ -82,7 +84,6 @@ char timecmp(DATE* time1,DATE* time2)
 	{
 		return 1;
 	}
-
 	if(time1->hour == time2->hour&&
 	   time1->min > time2->min )
 	{

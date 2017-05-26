@@ -1,4 +1,4 @@
-C51 COMPILER V9.54   SETING                                                                04/30/2017 19:51:39 PAGE 1   
+C51 COMPILER V9.54   SETING                                                                05/26/2017 20:48:15 PAGE 1   
 
 
 C51 COMPILER V9.54, COMPILATION OF MODULE SETING
@@ -22,7 +22,7 @@ line level    source
   11   1        {
   12   2          if (key==3)  
   13   2          {
-  14   3            beebee(1);
+  14   3            //beebee(1);
   15   3            lvsecond=1;
   16   3            key=-1;
   17   3          };
@@ -34,7 +34,7 @@ line level    source
   23   2          sprintf(str,"inputhour:=%d",(int)val);
   24   2          LCDprintf(str,0);
   25   2          if(key==3) {
-  26   3            beebee(1);
+  26   3            //beebee(1);
   27   3            lvsecond=2;
   28   3            closetime->hour = val;
   29   3            key=-1;
@@ -47,7 +47,7 @@ line level    source
   36   2          sprintf(str,"inputmin:=%d",(int)val);
   37   2          LCDprintf(str,0);
   38   2          if(key==3) {
-  39   3            beebee(1);
+  39   3            //beebee(1);
   40   3            lvsecond=3;
   41   3            closetime->min = val;
   42   3            key=-1;
@@ -60,9 +60,9 @@ line level    source
   49   2          sprintf(str,"inputsec:=%d",(int)val);
   50   2          LCDprintf(str,0);
   51   2          if(key==3) {
-  52   3          beebee(1);
+  52   3          //beebee(1);
   53   3          lvsecond=0;
-C51 COMPILER V9.54   SETING                                                                04/30/2017 19:51:39 PAGE 2   
+C51 COMPILER V9.54   SETING                                                                05/26/2017 20:48:15 PAGE 2   
 
   54   3          closetime->sec = val;
   55   3          key=-1;
@@ -126,7 +126,7 @@ line level    source
  112   3              //ÏÂ·­Ò³
  113   3                enablebee = ~enablebee;
  114   3              }
-C51 COMPILER V9.54   SETING                                                                04/30/2017 19:51:39 PAGE 3   
+C51 COMPILER V9.54   SETING                                                                05/26/2017 20:48:15 PAGE 3   
 
  115   2              if(enablebee)
  116   2              {
@@ -190,7 +190,7 @@ line level    source
  174   3              return;
  175   3            }
  176   2            LCDcls();
-C51 COMPILER V9.54   SETING                                                                04/30/2017 19:51:39 PAGE 4   
+C51 COMPILER V9.54   SETING                                                                05/26/2017 20:48:15 PAGE 4   
 
  177   2            val = inputbox();
  178   2            setp1 = lvtooff + 1;
@@ -210,7 +210,7 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   1140    ----
+   CODE SIZE        =   1119    ----
    CONSTANT SIZE    =    168    ----
    XDATA SIZE       =      6     101
    PDATA SIZE       =   ----    ----

@@ -9,9 +9,6 @@ void controllerinit()
 {	 
 	_BEEBEE = 0;
 	Initial_DS1302();
-//	DS1302_SetTime(DS1302_HOUR,10);	//??????????10??54??30
-//	DS1302_SetTime(DS1302_MINUTE,54);
-//	DS1302_SetTime(DS1302_SECOND,30); 
 	dbinit();
   LCD_init();  //初始化LCD模块 
 	LCDcls(); //清屏幕	
@@ -110,7 +107,7 @@ void cashcard(unsigned char *resdata)
 		//查找到了
 		number--;
 		delectidbyindex(selectindex);
-		sprintf(str,"NO.%d-OUT-;number-is.%d.",(int)selectindex,(int)number);
+		sprintf(str,"NO.%d-OUT-;number-is:%d.",(int)selectindex,(int)number);
 	}
 	else
 	{
@@ -123,7 +120,7 @@ void cashcard(unsigned char *resdata)
 			return;
 		} 
 		number++;
-		sprintf(str,"NO.%d-IN-;number-is-%d.",(int)insertindex,(int)number);
+		sprintf(str,"NO.%d-IN-;number-is:%d.",(int)insertindex,(int)number);
 	}
 	showmsg(str,3);
 	setread(1);

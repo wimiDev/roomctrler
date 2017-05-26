@@ -8,7 +8,7 @@ void update()
 	parafilter(RevTempDate0,RX_DATA_WITDH);
 }
 
-void sch1s()
+void sch2s()
 {
 	getcutrrenttime();
 	lightctrl(paralist,3,number);
@@ -17,7 +17,6 @@ void sch1s()
 } 
 void sch005s()
 {
-	
 	keyhandler();
 }
 void sch01s()

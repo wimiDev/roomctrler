@@ -9,6 +9,7 @@ sbit _BEEBEE = P2^6;//beebee
 
 extern unsigned char _page;//显示的页,一级菜单
 extern unsigned char lvsecond;//二级菜单，0表示未在二级菜单
+
 extern char trybee;
 extern bit enablebee;
 extern char msginval;//消息框弹出，0为小消失
