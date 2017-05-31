@@ -1,4 +1,4 @@
-C51 COMPILER V9.54   LIGTHCONTROLLER                                                       05/26/2017 20:48:15 PAGE 1   
+C51 COMPILER V9.54   LIGTHCONTROLLER                                                       05/31/2017 14:42:52 PAGE 1   
 
 
 C51 COMPILER V9.54, COMPILATION OF MODULE LIGTHCONTROLLER
@@ -51,111 +51,115 @@ line level    source
   41   1        //numberctrl(number);
   42   1        setlight(lightvalue);   
   43   1      }
-  44          void lightctrl(char*para,unsigned char _size,unsigned char number)
-  45          {
-  46   1        unsigned char index = 0;
-  47   1        unsigned char lightpoint = 0;//有几个点亮度是足够的
-  48   1        lightvalue = 0;//需要点亮多少个灯
-  49   1        for(index = 0;index < _size;index++)
-  50   1        {
-  51   2          //当前已经开了的灯，统计这点的亮度是足够的
-  52   2          if(lightstate[index]) 
-  53   2          {
-  54   3            lightvalue = ++lightvalue % 4;
-C51 COMPILER V9.54   LIGTHCONTROLLER                                                       05/26/2017 20:48:15 PAGE 2   
+  44          
+  45          /*
+  46          *BUG01:由于数据更新速率的问题，可能会带来采集点亮度数据不是实时
+  47          *同步的问题，会引发全部灯光熄灭再恢复正常。暂时解决办法是增加灯
+  48          *光处理方法的刷新时间间隔，确保数据能全部同步。
+  49          */
+  50          
+  51          void lightctrl(char*para,unsigned char _size,unsigned char number)
+  52          {
+  53   1        unsigned char index = 0;
+  54   1        unsigned char lightpoint = 0;//有几个点亮度是足够的
+C51 COMPILER V9.54   LIGTHCONTROLLER                                                       05/31/2017 14:42:52 PAGE 2   
 
-  55   3          }
-  56   2          //如果这个采集点的亮度不足标记这盏灯可以开
-  57   2          else if(para[index] > lvtoopen)
-  58   2          {
-  59   3            lightopen[index] = 1;
-  60   3            lightvalue = ++ lightvalue % 4;
-  61   3          }
-  62   2          //如果这个采集点的亮度过高标记这盏灯可以关
-  63   2          if(para[index] <= lvtooff )
-  64   2          {
-  65   3            lightopen[index] = 0;
-  66   3          }
-  67   2        }
-  68   1        lightpoint = _size - lightvalue;
-  69   1      //  lightvalue = 0;
-  70   1      //  if(number > lightpoint) 
-  71   1      //  {
-  72   1          lightvalue = number - lightpoint;
-  73   1          if(lightvalue < 0) lightvalue = 0;
-  74   1      //  }         
-  75   1      //  else
-  76   1      //  {
-  77   1      ////    lightvalue = 0;
-  78   1      //  }
-  79   1      }
-  80          char timecmp(DATE* time1,DATE* time2)
-  81          {
-*** WARNING C235 IN LINE 81 OF class\ligthcontroller.c: parameter 1: different types
-*** WARNING C235 IN LINE 81 OF class\ligthcontroller.c: parameter 2: different types
-  82   1        if(time1->hour > time2->hour) 
-  83   1        {
-  84   2          return 1;
-  85   2        }
-  86   1      
-  87   1        if(time1->hour == time2->hour&&
-  88   1           time1->min > time2->min )
-  89   1        {
-  90   2          return 1;
-  91   2        }
-  92   1        if(time1->hour == time2->hour&&
-  93   1           time1->min == time2->min&&
-  94   1           time1->sec > time2->sec) 
-  95   1        {
-  96   2          return 1;
-  97   2        }
-  98   1        return -1;
-  99   1      }
- 100          void timetoclose(DATE* curr,DATE* closetime,DATE* opentime)
- 101          {
-*** WARNING C235 IN LINE 101 OF class\ligthcontroller.c: parameter 1: different types
-*** WARNING C235 IN LINE 101 OF class\ligthcontroller.c: parameter 2: different types
-*** WARNING C235 IN LINE 101 OF class\ligthcontroller.c: parameter 3: different types
- 102   1        if(timecmp(closetime,opentime) > 0)
- 103   1        {
- 104   2          if(timecmp(curr,opentime) >0&&
- 105   2          timecmp(curr,closetime) <0 )
- 106   2          {
- 107   3            timeout = 0;
- 108   3            return;   
- 109   3          }
- 110   2          timeout=1;
- 111   2          lightvalue=0;   
-C51 COMPILER V9.54   LIGTHCONTROLLER                                                       05/26/2017 20:48:15 PAGE 3   
+  55   1        lightvalue = 0;//需要点亮多少个灯
+  56   1        
+  57   1        for(index = 0;index < _size;index++)
+  58   1        {
+  59   2          lightopen[index] = 0;
+  60   2          //如果这盏灯已经开了，就默认这个点的亮度是足够的
+  61   2          if(lightstate[index]) 
+  62   2          {
+  63   3            lightopen[index] = 1;
+  64   3            ++lightvalue;
+  65   3          }
+  66   2          //如果这个采集点的亮度不足标记这盏灯可以开
+  67   2          else if(para[index] > lvtoopen)
+  68   2          {
+  69   3            lightopen[index] = 1;
+  70   3            ++lightvalue ;
+  71   3          }
+  72   2          //如果这个采集点的亮度过高标记这盏灯可以关
+  73   2          if(para[index] <= lvtooff )
+  74   2          {
+  75   3            lightopen[index] = 0;
+  76   3          }
+  77   2        }
+  78   1        if(lightvalue>4) lightvalue = 4;
+  79   1        //计算有几个不需要开的灯
+  80   1        lightpoint = _size - lightvalue;
+  81   1        //根据现在有多少人来计算需要开多少盏灯
+  82   1        lightvalue = number - lightpoint;
+  83   1        if(lightvalue < 0) lightvalue = 0;
+  84   1      }
+  85          char timecmp(DATE* time1,DATE* time2)
+  86          {
+*** WARNING C235 IN LINE 86 OF class\ligthcontroller.c: parameter 1: different types
+*** WARNING C235 IN LINE 86 OF class\ligthcontroller.c: parameter 2: different types
+  87   1        if(time1->hour > time2->hour) 
+  88   1        {
+  89   2          return 1;
+  90   2        }
+  91   1        if(time1->hour == time2->hour&&
+  92   1           time1->min > time2->min )
+  93   1        {
+  94   2          return 1;
+  95   2        }
+  96   1        if(time1->hour == time2->hour&&
+  97   1           time1->min == time2->min&&
+  98   1           time1->sec > time2->sec) 
+  99   1        {
+ 100   2          return 1;
+ 101   2        }
+ 102   1        return -1;
+ 103   1      }
+ 104          void timetoclose(DATE* curr,DATE* closetime,DATE* opentime)
+ 105          {
+*** WARNING C235 IN LINE 105 OF class\ligthcontroller.c: parameter 1: different types
+*** WARNING C235 IN LINE 105 OF class\ligthcontroller.c: parameter 2: different types
+*** WARNING C235 IN LINE 105 OF class\ligthcontroller.c: parameter 3: different types
+ 106   1        if(timecmp(closetime,opentime) > 0)
+ 107   1        {
+ 108   2          if(timecmp(curr,opentime) >0&&
+ 109   2          timecmp(curr,closetime) <0 )
+ 110   2          {
+ 111   3            timeout = 0;
+C51 COMPILER V9.54   LIGTHCONTROLLER                                                       05/31/2017 14:42:52 PAGE 3   
 
- 112   2        }
- 113   1        else
- 114   1        {
- 115   2          if(timecmp(curr,opentime) < 0 && 
- 116   2            timecmp(curr,closetime) > 0)
- 117   2          {
- 118   3            //未到开灯时间
- 119   3            timeout=1;
- 120   3            lightvalue=0;
- 121   3            return;
- 122   3          }
- 123   2          timeout = 0;  
- 124   2        }   
- 125   1      }
- 126          
- 127          void numberctrl(unsigned char num)
- 128          {
- 129   1         if(timeout)return;
- 130   1         if(num <= lightvalue)
- 131   1         {
- 132   2          lightvalue = num;
- 133   2         }
- 134   1      }
- 135          
+ 112   3            return;   
+ 113   3          }
+ 114   2          timeout=1;
+ 115   2          lightvalue=0;   
+ 116   2        }
+ 117   1        else
+ 118   1        {
+ 119   2          if(timecmp(curr,opentime) < 0 && 
+ 120   2            timecmp(curr,closetime) > 0)
+ 121   2          {
+ 122   3            //未到开灯时间
+ 123   3            timeout=1;
+ 124   3            lightvalue=0;
+ 125   3            return;
+ 126   3          }
+ 127   2          timeout = 0;  
+ 128   2        }   
+ 129   1      }
+ 130          
+ 131          void numberctrl(unsigned char num)
+ 132          {
+ 133   1         if(timeout)return;
+ 134   1         if(num <= lightvalue)
+ 135   1         {
+ 136   2          lightvalue = num;
+ 137   2         }
+ 138   1      }
+ 139          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    711    ----
+   CODE SIZE        =    723    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =     11      21
    PDATA SIZE       =   ----    ----

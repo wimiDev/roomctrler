@@ -19,7 +19,7 @@ char setclosetime(DATE* closetime)
 	if(lvsecond == 1 )
 	{
 		LCDcls(); 	
-		val = inputbox();
+		val = inputbox()%24;
 		sprintf(str,"inputhour:=%d",(int)val);
 		LCDprintf(str,0);
 		if(key==3) {
@@ -32,7 +32,7 @@ char setclosetime(DATE* closetime)
 	if(lvsecond== 2 )
 	{
 		LCDcls(); 	
-		val = inputbox();
+		val = inputbox()%60;
 		sprintf(str,"inputmin:=%d",(int)val);
 		LCDprintf(str,0);
 		if(key==3) {
@@ -45,7 +45,7 @@ char setclosetime(DATE* closetime)
 	if(lvsecond== 3 )
 	{
 		LCDcls(); 	
-		val = inputbox();
+		val = inputbox()%60;
 		sprintf(str,"inputsec:=%d",(int)val);
 		LCDprintf(str,0);
 		if(key==3) {
@@ -85,7 +85,8 @@ char inputbox()
 	if(key==14)
 	{
 		//ÍË¸ñ
-		inputval = (inputval-inputval%10) / 10;		
+		inputval = (inputval-inputval%10) / 10;	
+		
 	}  	
 	return inputval;
 }

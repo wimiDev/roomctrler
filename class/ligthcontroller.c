@@ -53,18 +53,21 @@ void lightctrl(char*para,unsigned char _size,unsigned char number)
 	unsigned char index = 0;
 	unsigned char lightpoint = 0;//有几个点亮度是足够的
 	lightvalue = 0;//需要点亮多少个灯
+	
 	for(index = 0;index < _size;index++)
 	{
+		lightopen[index] = 0;
 		//如果这盏灯已经开了，就默认这个点的亮度是足够的
 		if(lightstate[index]) 
 		{
-			lightvalue = ++lightvalue % 4;
+			lightopen[index] = 1;
+			++lightvalue;
 		}
 		//如果这个采集点的亮度不足标记这盏灯可以开
 		else if(para[index] > lvtoopen)
 		{
 			lightopen[index] = 1;
-			lightvalue = ++ lightvalue % 4;
+			++lightvalue ;
 		}
 		//如果这个采集点的亮度过高标记这盏灯可以关
 		if(para[index] <= lvtooff )
@@ -72,7 +75,8 @@ void lightctrl(char*para,unsigned char _size,unsigned char number)
 			lightopen[index] = 0;
 		}
 	}
-	//计算有几个需要开的灯
+	if(lightvalue>4) lightvalue = 4;
+	//计算有几个不需要开的灯
 	lightpoint = _size - lightvalue;
 	//根据现在有多少人来计算需要开多少盏灯
 	lightvalue = number - lightpoint;
