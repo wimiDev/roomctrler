@@ -1,9 +1,7 @@
 #ifndef __CONTROLLER_H_
 #define __CONTROLLER_H_
 
-
 #include "global.h"
-
 
 typedef struct _DATE
 {

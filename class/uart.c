@@ -108,6 +108,11 @@ void setread(char read)
 	if(read==1) _uartrecvindex = 0;
    _readed = read;
 }
+/*
+*通信帖格式：
+*  7F 		0E 			00 		A0 	 00 …n… 90 00  63
+*命令头 命令长度 地址 命令字 		数据 			校验
+*/
 void _handlercash()
 {
 		char _recvbuf = 0;
@@ -115,7 +120,7 @@ void _handlercash()
 		{
 			return;//数据尚未处理
 		}
-		_recvbuf = SBUF;
+		_recvbuf = SBUF;，
 		if(_uartrecvindex < 5 && (_recvbuf != _starttag[_uartrecvindex]))
 		{
 			_uartrecvindex = 0;

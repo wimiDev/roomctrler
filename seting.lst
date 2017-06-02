@@ -1,4 +1,4 @@
-C51 COMPILER V9.54   SETING                                                                05/31/2017 14:42:52 PAGE 1   
+C51 COMPILER V9.54   SETING                                                                06/01/2017 14:26:32 PAGE 1   
 
 
 C51 COMPILER V9.54, COMPILATION OF MODULE SETING
@@ -30,11 +30,11 @@ line level    source
   19   1        if(lvsecond == 1 )
   20   1        {
   21   2          LCDcls();   
-  22   2          val = inputbox()%24;
+  22   2          val = inputbox(24);
   23   2          sprintf(str,"inputhour:=%d",(int)val);
   24   2          LCDprintf(str,0);
   25   2          if(key==3) {
-  26   3            //beebee(1);
+  26   3            clearinputval();
   27   3            lvsecond=2;
   28   3            closetime->hour = val;
   29   3            key=-1;
@@ -43,11 +43,11 @@ line level    source
   32   1        if(lvsecond== 2 )
   33   1        {
   34   2          LCDcls();   
-  35   2          val = inputbox()%60;
+  35   2          val = inputbox(60);
   36   2          sprintf(str,"inputmin:=%d",(int)val);
   37   2          LCDprintf(str,0);
   38   2          if(key==3) {
-  39   3            //beebee(1);
+  39   3            clearinputval();
   40   3            lvsecond=3;
   41   3            closetime->min = val;
   42   3            key=-1;
@@ -56,13 +56,13 @@ line level    source
   45   1        if(lvsecond== 3 )
   46   1        {
   47   2          LCDcls();   
-  48   2          val = inputbox()%60;
+  48   2          val = inputbox(60);
   49   2          sprintf(str,"inputsec:=%d",(int)val);
   50   2          LCDprintf(str,0);
   51   2          if(key==3) {
-  52   3          //beebee(1);
+  52   3          clearinputval();
   53   3          lvsecond=0;
-C51 COMPILER V9.54   SETING                                                                05/31/2017 14:42:52 PAGE 2   
+C51 COMPILER V9.54   SETING                                                                06/01/2017 14:26:32 PAGE 2   
 
   54   3          closetime->sec = val;
   55   3          key=-1;
@@ -87,133 +87,139 @@ line level    source
 *** WARNING C235 IN LINE 73 OF class\seting.c: parameter 1: different types
   74   1        setclosetime(opentime);
   75   1      }
-  76          char inputbox()
+  76          char inputbox(char _limit)
   77          {
   78   1        char key = getkey(0); 
   79   1        if(key!=-1&&getnumber(key)!=-1)
   80   1        {
   81   2          inputval = (inputval*10 + getnumber(key));
-  82   2        } 
-  83   1      //  //确定
-  84   1      //  if(key==3)return inputval;
-  85   1        if(key==14)
-  86   1        {
-  87   2          //退格
-  88   2          inputval = (inputval-inputval%10) / 10; 
-  89   2          
+  82   2          if(inputval >= _limit) inputval = _limit - 1;
+  83   2        } 
+  84   1      //  //确定
+  85   1      //  if(key==3)return inputval;
+  86   1        if(key==14)
+  87   1        {
+  88   2          //退格
+  89   2          inputval = (inputval-inputval%10) / 10; 
   90   2        }   
   91   1        return inputval;
   92   1      }
-  93          void setbeeanle()
+  93          void clearinputval()
   94          {
-  95   1          char str[30];
-  96   1        //获取输入的键值
-  97   1          char key = getkey(0);
-  98   1          if (key == 3 && lvsecond == 0)   
-  99   1          {
- 100   2            lvsecond = 4;
- 101   2            LCDcls(); 
- 102   2            key = -1;
- 103   2          }
- 104   1          if(lvsecond == 4)
- 105   1          {
- 106   2              if(key==15)
- 107   2              {
- 108   3              //上翻页
- 109   3                enablebee = ~enablebee;
- 110   3              }
- 111   2              if(key==11)
- 112   2              {
- 113   3              //下翻页
- 114   3                enablebee = ~enablebee;
-C51 COMPILER V9.54   SETING                                                                05/31/2017 14:42:52 PAGE 3   
+  95   1        inputval = 0;
+  96   1      }
+  97          void setbeeanle()
+  98          {
+  99   1          char str[30];
+ 100   1        //获取输入的键值
+ 101   1          char key = getkey(0);
+ 102   1          if (key == 3 && lvsecond == 0)   
+ 103   1          {
+ 104   2            lvsecond = 4;
+ 105   2            LCDcls(); 
+ 106   2            key = -1;
+ 107   2          }
+ 108   1          if(lvsecond == 4)
+ 109   1          {
+ 110   2              if(key==15)
+ 111   2              {
+ 112   3              //上翻页
+ 113   3                enablebee = ~enablebee;
+ 114   3              }
+C51 COMPILER V9.54   SETING                                                                06/01/2017 14:26:32 PAGE 3   
 
- 115   3              }
- 116   2              if(enablebee)
- 117   2              {
- 118   3                sprintf(str,"SET--BEE----ON----");
- 119   3                LCDprintf(str,0);
- 120   3              }
- 121   2              else
- 122   2              {
- 123   3                sprintf(str,"SET--BEE----OFF---");
- 124   3                LCDprintf(str,0);
- 125   3              }
- 126   2              if (key == 3)
- 127   2              {
- 128   3                lvsecond=0;
- 129   3                key = -1;
- 130   3                beebee(3);
- 131   3              }
- 132   2          }
- 133   1      }
- 134          void setlvoff_on()
- 135          {
- 136   1          char str[30];
- 137   1          char val = -1;
- 138   1          char setp1 = 0;
- 139   1          char setp2 = 10;
- 140   1        //获取输入的键值
- 141   1          char key = getkey(0);
- 142   1          if (key == 3 && lvsecond == 0)   
- 143   1          {
- 144   2            lvsecond = 5;
- 145   2            LCDcls(); 
- 146   2            key = -1;
- 147   2          }
- 148   1          else
- 149   1          {
- 150   2            sprintf(str,"LVCLOSE:%d-LVOPEN:%d",(int)lvtooff,(int)lvtoopen);
- 151   2            LCDprintf(str,0);
- 152   2          }
- 153   1          if(lvsecond == 5 )
- 154   1          {
- 155   2            LCDcls();
- 156   2            val = inputbox();
- 157   2            sprintf(str,"LV-CLOSE--%d-TO-%d---:=%d",(int)setp1,(int)setp2,(int)val);
- 158   2            LCDprintf(str,0);
- 159   2            if(val > 10)val = val%10;
- 160   2            if(val < 0)val = 0;
- 161   2            if(key==3)
- 162   2            {
- 163   3              lvsecond = 6;
- 164   3              key=-1;
- 165   3              lvtooff = val;
- 166   3            }
- 167   2          }
- 168   1          if(lvsecond == 6 )
- 169   1          {
- 170   2            if(lvtooff >= 10)
- 171   2            {
- 172   3              lvsecond = 0;
- 173   3              key=-1;
- 174   3              lvtoopen = 0;
- 175   3              return;
- 176   3            }
-C51 COMPILER V9.54   SETING                                                                05/31/2017 14:42:52 PAGE 4   
+ 115   2              if(key==11)
+ 116   2              {
+ 117   3              //下翻页
+ 118   3                enablebee = ~enablebee;
+ 119   3              }
+ 120   2              if(enablebee)
+ 121   2              {
+ 122   3                sprintf(str,"SET--BEE----ON----");
+ 123   3                LCDprintf(str,0);
+ 124   3              }
+ 125   2              else
+ 126   2              {
+ 127   3                sprintf(str,"SET--BEE----OFF---");
+ 128   3                LCDprintf(str,0);
+ 129   3              }
+ 130   2              if (key == 3)
+ 131   2              {
+ 132   3                lvsecond=0;
+ 133   3                key = -1;
+ 134   3                beebee(3);
+ 135   3              }
+ 136   2          }
+ 137   1      }
+ 138          void setlvoff_on()
+ 139          {
+ 140   1          char str[30];
+ 141   1          char val = -1;
+ 142   1          char setp1 = 0;
+ 143   1          char setp2 = 10;
+ 144   1        //获取输入的键值
+ 145   1          char key = getkey(0);
+ 146   1          if (key == 3 && lvsecond == 0)   
+ 147   1          {
+ 148   2            lvsecond = 5;
+ 149   2            LCDcls(); 
+ 150   2            key = -1;
+ 151   2          }
+ 152   1          else
+ 153   1          {
+ 154   2            sprintf(str,"LVCLOSE:%d-LVOPEN:%d",(int)lvtooff,(int)lvtoopen);
+ 155   2            LCDprintf(str,0);
+ 156   2          }
+ 157   1          if(lvsecond == 5 )
+ 158   1          {
+ 159   2            LCDcls();
+ 160   2            val = inputbox(10);
+ 161   2            sprintf(str,"LV-CLOSE--%d-TO-%d---:=%d",(int)setp1,(int)setp2,(int)val);
+ 162   2            LCDprintf(str,0);
+ 163   2      //      if(val > 10)val = val%10;
+ 164   2      //      if(val < 0)val = 0;
+ 165   2            if(key==3)
+ 166   2            {
+ 167   3              clearinputval();
+ 168   3              lvsecond = 6;
+ 169   3              key=-1;
+ 170   3              lvtooff = val;
+ 171   3            }
+ 172   2          }
+ 173   1          if(lvsecond == 6 )
+ 174   1          {
+ 175   2            if(lvtooff >= 10)
+ 176   2            {
+C51 COMPILER V9.54   SETING                                                                06/01/2017 14:26:32 PAGE 4   
 
- 177   2            LCDcls();
- 178   2            val = inputbox();
- 179   2            setp1 = lvtooff + 1;
- 180   2            sprintf(str,"LV-OPEN--%d-TO-%d---:=%d",(int)setp1,(int)setp2,(int)val);
- 181   2            LCDprintf(str,0);
- 182   2            if(val > 10)val = val%10;
- 183   2            if(val < 0)val = setp1;
- 184   2            if(key==3 )
- 185   2            {
- 186   3              LCDcls();
- 187   3              lvsecond = 0;
- 188   3              key=-1;
- 189   3              lvtoopen = val;
- 190   3            }
- 191   2          }
- 192   1      }
+ 177   3              lvsecond = 0;
+ 178   3              key=-1;
+ 179   3              lvtoopen = 0;
+ 180   3              return;
+ 181   3            }
+ 182   2            LCDcls();
+ 183   2            val = inputbox(10);
+ 184   2            setp1 = lvtooff + 1;
+ 185   2            sprintf(str,"LV-OPEN--%d-TO-%d---:=%d",(int)setp1,(int)setp2,(int)val);
+ 186   2            LCDprintf(str,0);
+ 187   2            if(val > 10)val = val%10;
+ 188   2            if(val < 0)val = setp1;
+ 189   2            if(key==3 )
+ 190   2            {
+ 191   3              clearinputval();
+ 192   3              LCDcls();
+ 193   3              lvsecond = 0;
+ 194   3              key=-1;
+ 195   3              lvtoopen = val;
+ 196   3            }
+ 197   2          }
+ 198   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   1146    ----
+   CODE SIZE        =   1136    ----
    CONSTANT SIZE    =    168    ----
-   XDATA SIZE       =      6     101
+   XDATA SIZE       =      6     102
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

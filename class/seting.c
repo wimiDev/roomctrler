@@ -19,11 +19,11 @@ char setclosetime(DATE* closetime)
 	if(lvsecond == 1 )
 	{
 		LCDcls(); 	
-		val = inputbox()%24;
+		val = inputbox(24);
 		sprintf(str,"inputhour:=%d",(int)val);
 		LCDprintf(str,0);
 		if(key==3) {
-			//beebee(1);
+			clearinputval();
 			lvsecond=2;
 			closetime->hour = val;
 			key=-1;
@@ -32,11 +32,11 @@ char setclosetime(DATE* closetime)
 	if(lvsecond== 2 )
 	{
 		LCDcls(); 	
-		val = inputbox()%60;
+		val = inputbox(60);
 		sprintf(str,"inputmin:=%d",(int)val);
 		LCDprintf(str,0);
 		if(key==3) {
-			//beebee(1);
+			clearinputval();
 			lvsecond=3;
 			closetime->min = val;
 			key=-1;
@@ -45,11 +45,11 @@ char setclosetime(DATE* closetime)
 	if(lvsecond== 3 )
 	{
 		LCDcls(); 	
-		val = inputbox()%60;
+		val = inputbox(60);
 		sprintf(str,"inputsec:=%d",(int)val);
 		LCDprintf(str,0);
 		if(key==3) {
-		//beebee(1);
+		clearinputval();
 		lvsecond=0;
 		closetime->sec = val;
 		key=-1;
@@ -73,12 +73,13 @@ void setopentime(DATE* opentime)
 {
 	setclosetime(opentime);
 }
-char inputbox()
+char inputbox(char _limit)
 {
 	char key = getkey(0); 
 	if(key!=-1&&getnumber(key)!=-1)
 	{
 		inputval = (inputval*10 + getnumber(key));
+		if(inputval >= _limit) inputval = _limit - 1;
 	} 
 //	//È·¶¨
 //	if(key==3)return inputval;
@@ -86,9 +87,12 @@ char inputbox()
 	{
 		//ÍË¸ñ
 		inputval = (inputval-inputval%10) / 10;	
-		
 	}  	
 	return inputval;
+}
+void clearinputval()
+{
+	inputval = 0;
 }
 void setbeeanle()
 {
@@ -153,13 +157,14 @@ void setlvoff_on()
 		if(lvsecond == 5 )
 		{
 			LCDcls();
-			val = inputbox();
+			val = inputbox(10);
 			sprintf(str,"LV-CLOSE--%d-TO-%d---:=%d",(int)setp1,(int)setp2,(int)val);
 			LCDprintf(str,0);
-			if(val > 10)val = val%10;
-			if(val < 0)val = 0;
+//			if(val > 10)val = val%10;
+//			if(val < 0)val = 0;
 			if(key==3)
 			{
+				clearinputval();
 				lvsecond = 6;
 				key=-1;
 				lvtooff = val;
@@ -175,7 +180,7 @@ void setlvoff_on()
 				return;
 			}
 			LCDcls();
-			val = inputbox();
+			val = inputbox(10);
 			setp1 = lvtooff + 1;
 			sprintf(str,"LV-OPEN--%d-TO-%d---:=%d",(int)setp1,(int)setp2,(int)val);
 			LCDprintf(str,0);
@@ -183,6 +188,7 @@ void setlvoff_on()
 			if(val < 0)val = setp1;
 			if(key==3 )
 			{
+				clearinputval();
 				LCDcls();
 				lvsecond = 0;
 				key=-1;
